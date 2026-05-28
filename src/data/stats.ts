@@ -7,61 +7,15 @@ export interface Stat {
 }
 
 export const heroStats: Stat[] = [
-  {
-    value: '1998',
-    label: 'Year Founded',
-    sublabel: '25+ years of execution',
-    icon: 'Calendar',
-  },
-  {
-    value: '25',
-    suffix: '+',
-    label: 'Years of Infrastructure',
-    sublabel: 'Proven execution track record',
-    icon: 'Award',
-  },
-  {
-    value: '8',
-    suffix: '+',
-    label: 'Business Sectors',
-    sublabel: 'Multi-domain capability',
-    icon: 'LayoutGrid',
-  },
-  {
-    value: '100',
-    suffix: '+',
-    label: 'Projects Executed',
-    sublabel: '[Placeholder — confirm count]',
-    icon: 'Building2',
-  },
+  { value: '1998', label: 'Year Founded', sublabel: 'Incorporated Jan 22, 1998', icon: 'Calendar' },
+  { value: '1230', suffix: 'Cr+', label: 'Revenue FY2025', sublabel: '₹1,230 Crore turnover', icon: 'TrendingUp' },
+  { value: '1400', suffix: '+', label: 'Workforce', sublabel: 'Direct employees', icon: 'Users' },
+  { value: '8', suffix: '+', label: 'Sectors', sublabel: 'Multi-domain capability', icon: 'LayoutGrid' },
 ];
 
 export const commandCenterStats: Stat[] = [
-  {
-    value: '500',
-    suffix: '+',
-    label: 'Skilled Workforce',
-    sublabel: '[Confirm headcount]',
-    icon: 'Users',
-  },
-  {
-    value: '50',
-    suffix: '+',
-    label: 'Equipment Fleet',
-    sublabel: '[Confirm equipment count]',
-    icon: 'Truck',
-  },
-  {
-    value: '15',
-    suffix: '+',
-    label: 'States Executed',
-    sublabel: 'Pan-India presence',
-    icon: 'MapPin',
-  },
-  {
-    value: '0',
-    label: 'Zero Compromise',
-    sublabel: 'On quality and safety',
-    icon: 'Shield',
-  },
+  { value: '222', suffix: 'Cr', label: 'DMRC Phase V Contract', sublabel: 'Delhi Metro — 2026', icon: 'Train' },
+  { value: '547', suffix: 'Cr', label: 'Mumbai Metro Depot', sublabel: 'MMRDA Line-6 — 2024', icon: 'Building2' },
+  { value: '665', suffix: 'Cr', label: 'Chennai Metro UG', sublabel: 'CMRL Corridor 3', icon: 'Layers' },
+  { value: '10', suffix: '+', label: 'Metro Corporations', sublabel: 'DMRC, MMRDA, CMRL, LMRC+', icon: 'MapPin' },
 ];

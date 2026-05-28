@@ -3,55 +3,63 @@ export interface TimelineEvent {
   title: string;
   description: string;
   milestone?: boolean;
+  metric?: string;
 }
 
 export const timeline: TimelineEvent[] = [
   {
     year: '1998',
-    title: 'Foundation of SAM India',
-    description: 'SAM India Builtwell Pvt. Ltd. was established with a vision to deliver quality infrastructure for India\'s growth. The company begins operations in civil construction.',
+    title: 'SAM India Founded',
+    description: 'SAM India Builtwell Pvt. Ltd. incorporated on January 22, 1998 in Delhi. CIN: U70101DL1998PTC091859. The company begins civil and construction operations.',
     milestone: true,
+    metric: 'Inception',
   },
   {
     year: 'Early 2000s',
     title: 'Building Institutional Credibility',
-    description: 'Secured and delivered early-phase institutional and civil infrastructure projects, establishing relationships with government agencies and public sector clients.',
-    milestone: false,
-  },
-  {
-    year: '2005–2010',
-    title: 'Expanding Sector Footprint',
-    description: 'Diversified into industrial, power sector, and large-scale institutional works. Developed deep execution capability across civil engineering domains.',
+    description: 'Early-phase partnerships with CPWD, MES, and government agencies. Delivered institutional and civil infrastructure projects establishing quality and delivery reputation.',
     milestone: false,
   },
   {
     year: '2010–2015',
-    title: 'Major Civil Infrastructure Projects',
-    description: 'Executed landmark civil and infrastructure projects across India. Invested in plant, machinery, and quality systems to support complex project delivery.',
+    title: 'Major Civil & Infrastructure Growth',
+    description: 'Significant expansion into large-scale civil infrastructure. Developed deep project execution capability — growing fleet, workforce, and multi-sector delivery capacity.',
     milestone: true,
+    metric: 'Scale-up',
   },
   {
-    year: '2016–2019',
-    title: 'Metro & Transportation Entry',
-    description: 'Entered the metro rail and transportation infrastructure space, executing both elevated and underground works. Built specialized expertise in metro station construction.',
+    year: '2017',
+    title: 'Mumbai Metro Entry — Aarey Depot',
+    description: 'Awarded metro depot and station civil works on Mumbai Metro Line 1 (Aarey Depot). Marked SAM India\'s entry into the prestigious Mumbai Metro ecosystem.',
     milestone: true,
+    metric: 'Metro',
   },
   {
-    year: '2019–2020',
-    title: 'Recognition & Awards Phase',
-    description: '[Recognition / Award milestone — to be confirmed and added by company]. Delivered complex healthcare and institutional infrastructure projects at national scale.',
-    milestone: false,
+    year: '2020',
+    title: 'Kanpur Metro — ₹150 Crore',
+    description: 'Awarded ₹150 crore contract by LMRC for civil and architectural finishing of nine elevated stations on Kanpur Metro priority corridor.',
+    milestone: true,
+    metric: '₹150 Cr',
   },
   {
-    year: '2020–2023',
-    title: 'Diversification & Digital Evolution',
-    description: 'Expanded into airport infrastructure, power energy, and real estate construction. Began adoption of digital project controls and site monitoring systems.',
+    year: '2023–2024',
+    title: 'Mumbai Metro Line-6 — ₹547 Crore',
+    description: 'MMRDA awards ₹547.45 crore Kanjurmarg Depot contract (CA-209). Chennai Metro Corridor 3 Package UG05 (₹665.99 Cr) commenced.',
     milestone: true,
+    metric: '₹1,200 Cr+',
   },
   {
-    year: '2024+',
-    title: 'Technology-Led Infrastructure',
-    description: 'Investing in advanced project management systems, real-time site reporting, and AI-ready data infrastructure to deliver next-generation construction performance.',
+    year: '2026',
+    title: 'Delhi Metro Phase V — First DMRC Contract',
+    description: 'DMRC issues Letter of Acceptance for Contract EC-01 (₹222.76 Crore) — design and construction of Yuge Yugeen Bharat underground metro station under Phase V(A).',
     milestone: true,
+    metric: '₹222.76 Cr',
+  },
+  {
+    year: 'Future',
+    title: 'Technology-Led Infrastructure Enterprise',
+    description: 'Building toward ₹2,000 Crore+ scale with expanded metro, underground, institutional, and power infrastructure portfolio. Investing in digital project controls and AI-ready systems.',
+    milestone: true,
+    metric: 'Vision 2030',
   },
 ];

@@ -2,131 +2,206 @@
 
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Points, PointMaterial } from '@react-three/drei';
+import { Points, PointMaterial, Line, Float } from '@react-three/drei';
 import * as THREE from 'three';
 
-function ParticleField() {
+/* Rotating particle cloud */
+function ParticleCloud() {
   const ref = useRef<THREE.Points>(null);
+  const count = 2000;
 
-  const positions = useMemo(() => {
-    const count = 1200;
-    const arr = new Float32Array(count * 3);
+  const [positions, colors] = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const col = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      arr[i * 3] = (Math.random() - 0.5) * 20;
-      arr[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      arr[i * 3 + 2] = (Math.random() - 0.5) * 20;
+      const r = 6 + Math.random() * 6;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = r * Math.cos(phi);
+      const bright = 0.4 + Math.random() * 0.6;
+      col[i * 3] = 0;
+      col[i * 3 + 1] = bright * 0.8;
+      col[i * 3 + 2] = bright;
     }
-    return arr;
+    return [pos, col];
   }, []);
 
   useFrame((state) => {
     if (!ref.current) return;
-    ref.current.rotation.y = state.clock.elapsedTime * 0.04;
-    ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.02) * 0.1;
+    ref.current.rotation.y = state.clock.elapsedTime * 0.03;
+    ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.015) * 0.15;
   });
 
   return (
-    <Points ref={ref} positions={positions} stride={3}>
-      <PointMaterial color="#00d4ff" size={0.04} sizeAttenuation transparent opacity={0.6} />
+    <Points ref={ref} positions={positions}>
+      <PointMaterial vertexColors size={0.035} sizeAttenuation transparent opacity={0.7} />
     </Points>
   );
 }
 
-function GridPlane() {
+/* Wireframe globe */
+function WireGlobe() {
   const ref = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
     if (!ref.current) return;
-    ref.current.position.y = -3 + Math.sin(state.clock.elapsedTime * 0.3) * 0.2;
+    ref.current.rotation.y = state.clock.elapsedTime * 0.05;
+    ref.current.rotation.z = state.clock.elapsedTime * 0.02;
   });
 
-  const geometry = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(30, 30, 30, 30);
-    return geo;
-  }, []);
-
   return (
-    <mesh ref={ref} geometry={geometry} rotation={[-Math.PI / 2, 0, 0]} position={[0, -3, 0]}>
-      <meshBasicMaterial color="#00d4ff" wireframe transparent opacity={0.07} />
+    <mesh ref={ref}>
+      <sphereGeometry args={[3.5, 32, 32]} />
+      <meshBasicMaterial color="#00d4ff" wireframe transparent opacity={0.06} />
     </mesh>
   );
 }
 
-function FloatingNodes() {
+/* Inner glowing sphere */
+function GlowSphere() {
+  const ref = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (!ref.current) return;
+    const mat = ref.current.material as THREE.MeshBasicMaterial;
+    mat.opacity = 0.03 + Math.sin(state.clock.elapsedTime * 0.8) * 0.02;
+  });
+
+  return (
+    <mesh ref={ref}>
+      <sphereGeometry args={[3.2, 16, 16]} />
+      <meshBasicMaterial color="#1e6fff" transparent opacity={0.04} />
+    </mesh>
+  );
+}
+
+/* Metro network nodes */
+function NetworkNodes() {
   const groupRef = useRef<THREE.Group>(null);
 
   const nodes = useMemo(() => {
-    return Array.from({ length: 12 }, (_, i) => ({
-      position: [
-        Math.cos((i / 12) * Math.PI * 2) * 5,
-        Math.sin(i * 1.1) * 2,
-        Math.sin((i / 12) * Math.PI * 2) * 5,
-      ] as [number, number, number],
-      scale: 0.06 + Math.random() * 0.08,
-    }));
+    return Array.from({ length: 20 }, (_, i) => {
+      const theta = (i / 20) * Math.PI * 2;
+      const phi = (Math.random() * 0.6 + 0.2) * Math.PI;
+      const r = 3.5;
+      return {
+        position: [
+          r * Math.sin(phi) * Math.cos(theta),
+          r * Math.sin(phi) * Math.sin(theta),
+          r * Math.cos(phi),
+        ] as [number, number, number],
+        scale: 0.04 + Math.random() * 0.06,
+        speed: 0.5 + Math.random(),
+        phase: Math.random() * Math.PI * 2,
+      };
+    });
   }, []);
 
   useFrame((state) => {
     if (!groupRef.current) return;
-    groupRef.current.rotation.y = state.clock.elapsedTime * 0.08;
+    groupRef.current.rotation.y = state.clock.elapsedTime * 0.04;
   });
 
   return (
     <group ref={groupRef}>
       {nodes.map((node, i) => (
-        <mesh key={i} position={node.position}>
-          <octahedronGeometry args={[node.scale, 0]} />
-          <meshBasicMaterial color={i % 3 === 0 ? '#1e6fff' : '#00d4ff'} wireframe />
-        </mesh>
+        <Float key={i} speed={node.speed} rotationIntensity={0.3} floatIntensity={0.2}>
+          <mesh position={node.position}>
+            <octahedronGeometry args={[node.scale, 0]} />
+            <meshBasicMaterial
+              color={i % 4 === 0 ? '#f0a020' : i % 3 === 0 ? '#1e6fff' : '#00d4ff'}
+              transparent
+              opacity={0.9}
+            />
+          </mesh>
+        </Float>
       ))}
     </group>
   );
 }
 
-function ConnectingLines() {
-  const ref = useRef<THREE.LineSegments>(null);
+/* Animated connection lines between nodes */
+function ConnectionLines() {
+  const groupRef = useRef<THREE.Group>(null);
 
-  const geometry = useMemo(() => {
-    const points: number[] = [];
+  const lines = useMemo(() => {
+    const result = [];
     const nodeCount = 12;
     for (let i = 0; i < nodeCount; i++) {
       const a = (i / nodeCount) * Math.PI * 2;
-      const b = ((i + 1) / nodeCount) * Math.PI * 2;
-      points.push(Math.cos(a) * 5, Math.sin(i * 1.1) * 2, Math.sin(a) * 5);
-      points.push(Math.cos(b) * 5, Math.sin((i + 1) * 1.1) * 2, Math.sin(b) * 5);
+      const b = ((i + 3) / nodeCount) * Math.PI * 2;
+      const r = 3.5;
+      const phi1 = Math.PI * 0.4;
+      const phi2 = Math.PI * 0.6;
+      result.push({
+        points: [
+          new THREE.Vector3(r * Math.sin(phi1) * Math.cos(a), r * Math.cos(phi1), r * Math.sin(phi1) * Math.sin(a)),
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(r * Math.sin(phi2) * Math.cos(b), r * Math.cos(phi2), r * Math.sin(phi2) * Math.sin(b)),
+        ],
+        color: i % 3 === 0 ? '#1e6fff' : '#00d4ff',
+      });
     }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
-    return geo;
+    return result;
   }, []);
 
   useFrame((state) => {
-    if (!ref.current) return;
-    ref.current.rotation.y = state.clock.elapsedTime * 0.08;
-    const mat = ref.current.material as THREE.LineBasicMaterial;
-    mat.opacity = 0.2 + Math.sin(state.clock.elapsedTime) * 0.1;
+    if (!groupRef.current) return;
+    groupRef.current.rotation.y = state.clock.elapsedTime * 0.04;
   });
 
   return (
-    <lineSegments ref={ref} geometry={geometry}>
-      <lineBasicMaterial color="#00d4ff" transparent opacity={0.25} />
-    </lineSegments>
+    <group ref={groupRef}>
+      {lines.map((line, i) => (
+        <Line
+          key={i}
+          points={line.points}
+          color={line.color}
+          lineWidth={0.3}
+          transparent
+          opacity={0.12}
+        />
+      ))}
+    </group>
+  );
+}
+
+/* Horizontal ring grid */
+function HorizonGrid() {
+  const ref = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (!ref.current) return;
+    ref.current.position.y = -4 + Math.sin(state.clock.elapsedTime * 0.2) * 0.3;
+    const mat = ref.current.material as THREE.MeshBasicMaterial;
+    mat.opacity = 0.04 + Math.sin(state.clock.elapsedTime * 0.5) * 0.02;
+  });
+
+  return (
+    <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]} position={[0, -4, 0]}>
+      <planeGeometry args={[30, 30, 40, 40]} />
+      <meshBasicMaterial color="#00d4ff" wireframe transparent opacity={0.04} />
+    </mesh>
   );
 }
 
 export default function InfraScene() {
   return (
     <Canvas
-      camera={{ position: [0, 2, 12], fov: 60 }}
+      camera={{ position: [0, 0, 12], fov: 55 }}
       dpr={[1, 1.5]}
       performance={{ min: 0.5 }}
       style={{ background: 'transparent' }}
+      gl={{ antialias: true, alpha: true }}
     >
-      <ambientLight intensity={0.5} />
-      <ParticleField />
-      <GridPlane />
-      <FloatingNodes />
-      <ConnectingLines />
+      <WireGlobe />
+      <GlowSphere />
+      <NetworkNodes />
+      <ConnectionLines />
+      <ParticleCloud />
+      <HorizonGrid />
     </Canvas>
   );
 }
