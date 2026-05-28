@@ -1,0 +1,150 @@
+export interface Sector {
+  id: string;
+  title: string;
+  shortTitle: string;
+  icon: string;
+  description: string;
+  capabilities: string[];
+  projectTypes: string[];
+  color: string;
+}
+
+export const sectors: Sector[] = [
+  {
+    id: 'metro-transport',
+    title: 'Metro & Transportation Infrastructure',
+    shortTitle: 'Metro & Transport',
+    icon: 'Train',
+    description: 'End-to-end metro and transportation infrastructure execution — from elevated viaducts and station works to systems integration support.',
+    capabilities: [
+      'Elevated viaduct and pier construction',
+      'Metro station civil and structural works',
+      'Depot and maintenance facility construction',
+      'Ramp and approach structure works',
+      'Track bed and ballastless track structures',
+      'Systems interface coordination',
+    ],
+    projectTypes: ['Elevated Metro Corridors', 'Metro Stations', 'Depot Facilities', 'Interchange Hubs', 'Bus Rapid Transit', 'Flyovers & Overpasses'],
+    color: '#00d4ff',
+  },
+  {
+    id: 'underground-metro',
+    title: 'Underground Metro Works',
+    shortTitle: 'Underground Metro',
+    icon: 'Layers',
+    description: 'Specialist underground metro construction including diaphragm walls, cut-and-cover structures, NATM tunneling, and deep station boxes.',
+    capabilities: [
+      'Diaphragm wall construction',
+      'Cut-and-cover tunneling',
+      'NATM / SEM tunneling support',
+      'Deep excavation with propped systems',
+      'Ground improvement and dewatering',
+      'Waterproofing of underground structures',
+      'TBM retrieval shaft construction',
+    ],
+    projectTypes: ['Underground Metro Stations', 'Tunnels', 'Station Boxes', 'Shafts & Adits', 'TBM Launch/Retrieval Works'],
+    color: '#1e6fff',
+  },
+  {
+    id: 'institutional',
+    title: 'Institutional & Public Infrastructure',
+    shortTitle: 'Institutional',
+    icon: 'Building2',
+    description: 'Large-scale institutional campus and public infrastructure delivery for central and state government agencies, PSUs, and public authorities.',
+    capabilities: [
+      'Government campus development',
+      'Administrative and secretariat buildings',
+      'Educational institution infrastructure',
+      'Judicial and law enforcement facilities',
+      'Cultural and heritage facilities',
+      'CPWD and PWD standard execution',
+    ],
+    projectTypes: ['Government Complexes', 'Academic Campuses', 'Administrative Buildings', 'Courts', 'Police / Paramilitary Facilities', 'Cultural Centers'],
+    color: '#8899bb',
+  },
+  {
+    id: 'healthcare',
+    title: 'Hospitals & Healthcare Infrastructure',
+    shortTitle: 'Healthcare',
+    icon: 'Heart',
+    description: 'Specialist construction of hospitals, medical colleges, AIIMS-grade campuses, and healthcare facilities with full MEP and infection-control compliance.',
+    capabilities: [
+      'Multi-specialty hospital construction',
+      'OT, ICU, and sterile zone civil works',
+      'Medical gas piping and specialist MEP',
+      'NABH-compliant construction',
+      'Medical college and research facility construction',
+      'Staff residential and support infrastructure',
+    ],
+    projectTypes: ['Government Hospitals', 'AIIMS-type Campuses', 'Medical Colleges', 'Trauma Centers', 'Primary Health Centers', 'Isolation Facilities'],
+    color: '#10b981',
+  },
+  {
+    id: 'industrial',
+    title: 'Industrial & Specialized Civil Works',
+    shortTitle: 'Industrial',
+    icon: 'Factory',
+    description: 'Greenfield and brownfield industrial facility construction with heavy foundations, large-span structures, and specialist civil engineering.',
+    capabilities: [
+      'Greenfield industrial plant construction',
+      'Heavy equipment foundations',
+      'Industrial structural steel erection',
+      'Large-span pre-engineered buildings',
+      'High-flatness industrial flooring',
+      'Storage and logistics facility construction',
+    ],
+    projectTypes: ['Manufacturing Plants', 'Warehousing & Logistics', 'Defense Production Facilities', 'Chemical Plant Civil Works', 'Steel Plant Civil Works', 'Cement Plant Structures'],
+    color: '#f0a020',
+  },
+  {
+    id: 'power-energy',
+    title: 'Power & Energy Infrastructure',
+    shortTitle: 'Power & Energy',
+    icon: 'Zap',
+    description: 'Civil, structural, and foundation works for power generation and transmission infrastructure — thermal, hydro, solar, and substation civil works.',
+    capabilities: [
+      'Turbine hall and boiler foundation construction',
+      'Natural draft cooling tower construction',
+      'Coal handling plant structures',
+      'Substation civil works',
+      'Solar park civil and mounting works',
+      'Transmission line tower foundations',
+    ],
+    projectTypes: ['Thermal Power Plant Civil Works', 'Hydro Power Civil Works', 'Solar Plant Civil Works', 'Substations', 'Transmission Towers', 'Ash Pond Works'],
+    color: '#eab308',
+  },
+  {
+    id: 'real-estate',
+    title: 'Real Estate & Development',
+    shortTitle: 'Real Estate',
+    icon: 'Home',
+    description: 'High-rise residential and mixed-use development construction — from basement to podium to towers — with premium quality and schedule discipline.',
+    capabilities: [
+      'Multi-tower high-rise residential construction',
+      'Basement and foundation works',
+      'Podium and transfer structure construction',
+      'Facade and external finishing',
+      'Clubhouse and amenity construction',
+      'Site infrastructure and landscape works',
+    ],
+    projectTypes: ['Residential Towers', 'Integrated Townships', 'Mixed-Use Development', 'Plotted Development Infrastructure', 'Affordable Housing', 'Government Housing'],
+    color: '#8b5cf6',
+  },
+  {
+    id: 'roads-urban',
+    title: 'Roads & Urban Infrastructure',
+    shortTitle: 'Roads & Urban',
+    icon: 'MapPin',
+    description: 'Roads, urban infrastructure, bridges, flyovers, and public realm development for smart city and urban renewal projects.',
+    capabilities: [
+      'National and state highway construction',
+      'Urban road and pavement works',
+      'Bridge and flyover construction',
+      'Stormwater drainage systems',
+      'Utility duct and service corridor construction',
+      'Public realm and pedestrian infrastructure',
+    ],
+    projectTypes: ['Highways', 'Urban Roads', 'Bridges', 'Flyovers', 'Smart City Infrastructure', 'Drainage Works'],
+    color: '#06b6d4',
+  },
+];
