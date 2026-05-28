@@ -162,3 +162,25 @@ body::after {
 /* Horizontal scroll utility */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Infinite marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.marquee {
+  animation: marquee linear infinite;
+  width: max-content;
+}
+.marquee-reverse {
+  animation: marquee-reverse linear infinite;
+  width: max-content;
+}
+.marquee:hover,
+.marquee-reverse:hover {
+  animation-play-state: paused;
+}

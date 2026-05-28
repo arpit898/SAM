@@ -6,6 +6,7 @@ import SectorsSection from '@/components/sections/SectorsSection';
 import ProjectsPreviewSection from '@/components/sections/ProjectsPreviewSection';
 import ShaderSection from '@/components/sections/ShaderSection';
 import CommandCenterSection from '@/components/sections/CommandCenterSection';
+import TBMSection from '@/components/sections/TBMSection';
 import TechnologySection from '@/components/sections/TechnologySection';
 import TimelineSection from '@/components/sections/TimelineSection';
 import ClientsSection from '@/components/sections/ClientsSection';
@@ -26,6 +27,7 @@ export default function HomePage() {
       <SectorsSection />
       <ProjectsPreviewSection />
       <ShaderSection />
+      <TBMSection />
       <CommandCenterSection />
       <TechnologySection />
       <TimelineSection />
