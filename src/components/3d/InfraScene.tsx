@@ -219,18 +219,24 @@ function TunnelGlow() {
   );
 }
 
-// Camera smoothly follows mouse for parallax depth
+// Camera scroll-driven flythrough + mouse parallax
 function CameraRig({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
   const { camera } = useThree();
   const lerp = useRef({ x: 0, y: 0.3 });
 
   useFrame(() => {
     const [mx, my] = mouse.current;
-    lerp.current.x += (mx * 0.35 - lerp.current.x) * 0.035;
+    const scrollP = typeof window !== 'undefined'
+      ? ((window as Window & { __heroScrollProgress?: number }).__heroScrollProgress ?? 0)
+      : 0;
+
+    lerp.current.x += (mx * 0.35 * (1 - scrollP * 0.6) - lerp.current.x) * 0.035;
     lerp.current.y += (-my * 0.2 + 0.3 - lerp.current.y) * 0.035;
+
     camera.position.x = lerp.current.x;
     camera.position.y = lerp.current.y;
-    camera.lookAt(lerp.current.x * 0.1, lerp.current.y * 0.1, -10);
+    camera.position.z = 6 - scrollP * 48; // flies into tunnel on hero scroll
+    camera.lookAt(lerp.current.x * 0.1, lerp.current.y * 0.1, camera.position.z - 20);
   });
 
   return null;
