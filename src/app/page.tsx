@@ -4,6 +4,7 @@ import MorphSection from '@/components/sections/MorphSection';
 import StatsSection from '@/components/sections/StatsSection';
 import SectorsSection from '@/components/sections/SectorsSection';
 import ProjectsPreviewSection from '@/components/sections/ProjectsPreviewSection';
+import ShaderSection from '@/components/sections/ShaderSection';
 import CommandCenterSection from '@/components/sections/CommandCenterSection';
 import TechnologySection from '@/components/sections/TechnologySection';
 import TimelineSection from '@/components/sections/TimelineSection';
@@ -24,6 +25,7 @@ export default function HomePage() {
       <StatsSection />
       <SectorsSection />
       <ProjectsPreviewSection />
+      <ShaderSection />
       <CommandCenterSection />
       <TechnologySection />
       <TimelineSection />
