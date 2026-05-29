@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/ui/CustomCursor';
 import LoadingScreen from '@/components/LoadingScreen';
+import LenisProvider from '@/providers/LenisProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -54,9 +55,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen flex flex-col bg-[#000000] text-white">
         <LoadingScreen />
         <CustomCursor />
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <LenisProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </LenisProvider>
       </body>
     </html>
   );
