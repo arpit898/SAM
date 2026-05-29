@@ -3,7 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - claude/sam-india-website-build-SVb1C
       - main
   workflow_dispatch:
 
