@@ -118,7 +118,7 @@ export default function MorphCanvas() {
       dpr={[1, 2]}
       style={{ width: '100%', height: '100%' }}
     >
-      <ambientLight color="#0a1628" intensity={0.3} />
+      <ambientLight color="#050505" intensity={0.3} />
       <pointLight color="#00d4ff" intensity={2} position={[3, 3, 3]} />
       <MorphParticles />
     </Canvas>

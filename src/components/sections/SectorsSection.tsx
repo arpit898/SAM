@@ -1,15 +1,13 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import type { LucideProps } from 'lucide-react';
-import { Train, Layers, Building2, Heart, Factory, Zap, Home, MapPin, ArrowRight } from 'lucide-react';
+import { Train, Layers, Building2, Heart, Factory, Zap, Home, MapPin, ArrowUpRight } from 'lucide-react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { sectors } from '@/data/sectors';
 import Container from '@/components/ui/Container';
-import SectionHeader from '@/components/ui/SectionHeader';
-import TiltCard from '@/components/ui/TiltCard';
 
 type LucideIcon = ForwardRefExoticComponent<LucideProps & RefAttributes<SVGSVGElement>>;
 
@@ -17,124 +15,139 @@ const iconMap: Record<string, LucideIcon> = {
   Train, Layers, Building2, Heart, Factory, Zap, Home, MapPin,
 };
 
+const accentColors = ['#00d4ff','#1e6fff','#10b981','#f0a020','#00d4ff','#1e6fff','#10b981','#f0a020'];
+
 export default function SectorsSection() {
   const ref = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const bgY = useTransform(scrollYProgress, [0, 1], ['-3%', '3%']);
 
   return (
-    <section ref={ref} className="relative py-24 bg-[#050a1a] overflow-hidden">
-      <motion.div style={{ y: bgY }} className="absolute inset-0 blueprint-grid opacity-30" />
+    <section ref={ref} className="relative overflow-hidden" style={{ background: '#050505' }}>
+      <motion.div style={{ y: bgY }}
+        className="absolute inset-0 blueprint-grid-fine pointer-events-none" />
+      <div className="h-px bg-white/5" />
 
-      {/* Ambient radial glow */}
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 60%, rgba(30,111,255,0.05), transparent 70%)' }}
-      />
+      <Container className="py-20 lg:py-28">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+          <div>
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-[9px] font-black uppercase tracking-[0.45em] text-cyan-400 block mb-3"
+            >
+              Our Sectors
+            </motion.span>
+            <div className="overflow-hidden">
+              <motion.h2
+                initial={{ y: '110%' }}
+                whileInView={{ y: '0%' }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+                className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.0] tracking-[-0.025em]"
+              >
+                Eight Sectors.<br />
+                <span className="gradient-text-cyan">One Capability.</span>
+              </motion.h2>
+            </div>
+          </div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="text-[13px] text-[#888899] max-w-xs leading-relaxed flex-shrink-0"
+          >
+            From metro tunnels to power substations — SAM India executes across India&apos;s
+            most critical infrastructure sectors.
+          </motion.p>
+        </div>
 
-      <Container>
-        <SectionHeader
-          tag="Our Sectors"
-          title="Multi-Sector Infrastructure Capability"
-          subtitle="From metro tunnels to power plants — SAM India delivers complex infrastructure across India's most critical sectors with engineering depth and execution strength."
-          className="max-w-2xl"
-        />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12">
+        {/* Row list */}
+        <div className="divide-y divide-white/5">
           {sectors.map((sector, i) => {
             const Icon = iconMap[sector.icon] || Building2;
+            const color = accentColors[i];
+            const active = hovered === i;
             return (
               <motion.div
                 key={sector.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.55, delay: i * 0.07, ease: [0.21, 0.47, 0.32, 0.98] }}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-30px' }}
+                transition={{ duration: 0.5, delay: i * 0.055, ease: [0.21, 0.47, 0.32, 0.98] }}
               >
                 <Link href={`/sectors#${sector.id}`}>
-                  <TiltCard
-                    className="group relative h-full glass rounded-2xl p-6 border border-white/5 hover:border-white/12 transition-all duration-400 cursor-pointer overflow-hidden"
-                    intensity={7}
+                  <div
+                    className="group relative flex items-center gap-5 sm:gap-8 py-5 sm:py-6 cursor-pointer"
+                    onMouseEnter={() => setHovered(i)}
+                    onMouseLeave={() => setHovered(null)}
                   >
-                    {/* Background glow */}
-                    <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
-                      style={{ background: `radial-gradient(ellipse at top left, ${sector.color}10, transparent 65%)` }}
+                    {/* Left accent */}
+                    <motion.div
+                      animate={{ scaleY: active ? 1 : 0, opacity: active ? 1 : 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full origin-top"
+                      style={{ background: color }}
                     />
 
-                    {/* Top edge glow line */}
-                    <div
-                      className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      style={{ background: `linear-gradient(90deg, transparent, ${sector.color}70, transparent)` }}
-                    />
+                    <span className="text-[11px] font-mono text-white/20 w-5 flex-shrink-0 group-hover:text-[#888899] transition-colors">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
 
-                    {/* Corner accent */}
-                    <div className="absolute bottom-0 right-0 w-16 h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                      <div className="absolute bottom-2 right-2 w-4 h-px" style={{ background: sector.color }} />
-                      <div className="absolute bottom-2 right-2 h-4 w-px" style={{ background: sector.color }} />
-                    </div>
+                    <motion.div
+                      animate={{ scale: active ? 1.1 : 1 }}
+                      className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300"
+                      style={{
+                        background: active ? `${color}18` : 'rgba(255,255,255,0.04)',
+                        border: `1px solid ${active ? color + '40' : 'rgba(255,255,255,0.06)'}`,
+                      }}
+                    >
+                      <Icon className="w-4 h-4 transition-colors duration-300"
+                        style={{ color: active ? color : '#888899' }} />
+                    </motion.div>
 
-                    <div className="relative">
-                      {/* Icon container */}
-                      <motion.div
-                        whileHover={{ scale: 1.15, rotate: 5 }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                        className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                        style={{
-                          background: `${sector.color}15`,
-                          border: `1px solid ${sector.color}35`,
-                          boxShadow: `0 0 20px ${sector.color}10`,
-                        }}
-                      >
-                        <Icon className="w-6 h-6" style={{ color: sector.color }} />
-                      </motion.div>
-
-                      {/* Category number */}
-                      <div
-                        className="absolute top-0 right-0 text-[40px] font-black opacity-[0.04] leading-none pointer-events-none select-none"
-                        style={{ color: sector.color }}
-                      >
-                        {String(i + 1).padStart(2, '0')}
-                      </div>
-
-                      <h3 className="text-white font-bold text-base mb-2 leading-snug group-hover:text-white transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base sm:text-lg font-black text-white/80 group-hover:text-white transition-colors duration-200">
                         {sector.shortTitle}
                       </h3>
-
-                      <p className="text-sm leading-relaxed mb-5 line-clamp-3" style={{ color: '#8899bb' }}>
-                        {sector.description}
-                      </p>
-
-                      <div
-                        className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-300 group-hover:gap-2.5"
-                        style={{ color: sector.color }}
-                      >
-                        Learn More
-                        <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
-                      </div>
+                      <AnimatePresence>
+                        {active && (
+                          <motion.p
+                            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                            animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
+                            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                            transition={{ duration: 0.22 }}
+                            className="text-[12px] text-[#888899] leading-relaxed overflow-hidden"
+                          >
+                            {sector.description}
+                          </motion.p>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  </TiltCard>
+
+                    <span className="hidden sm:block text-[10px] font-bold uppercase tracking-wider text-[#888899] flex-shrink-0">
+                      {sector.capabilities.length} Capabilities
+                    </span>
+
+                    <motion.div
+                      animate={{ x: active ? 0 : -4, opacity: active ? 1 : 0.2 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex-shrink-0"
+                    >
+                      <ArrowUpRight className="w-4 h-4 text-white" />
+                    </motion.div>
+                  </div>
                 </Link>
               </motion.div>
             );
           })}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="mt-12 text-center"
-        >
-          <Link
-            href="/sectors"
-            className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-bold uppercase tracking-wider text-white border border-white/10 hover:border-cyan-400/30 hover:text-cyan-400 hover:bg-cyan-400/5 transition-all duration-300"
-          >
-            Explore All Sectors
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
       </Container>
+      <div className="h-px bg-white/5" />
     </section>
   );
 }

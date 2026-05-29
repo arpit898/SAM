@@ -51,11 +51,11 @@ export default function LoadingScreen() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden" style={{ background: '#050a1a' }}>
+    <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden" style={{ background: '#000' }}>
       {/* Top half panel */}
       <motion.div
         className="absolute left-0 right-0 top-0 h-1/2 flex flex-col"
-        style={{ background: '#050a1a' }}
+        style={{ background: '#000' }}
         animate={{ y: exiting ? '-100%' : '0%' }}
         transition={{ duration: 0.85, ease: [0.76, 0, 0.24, 1] }}
       >
@@ -70,7 +70,7 @@ export default function LoadingScreen() {
       {/* Bottom half panel */}
       <motion.div
         className="absolute left-0 right-0 bottom-0 h-1/2 flex flex-col justify-end"
-        style={{ background: '#050a1a' }}
+        style={{ background: '#000' }}
         animate={{ y: exiting ? '100%' : '0%' }}
         transition={{ duration: 0.85, ease: [0.76, 0, 0.24, 1] }}
       >

@@ -269,8 +269,8 @@ function Scene() {
 
   return (
     <>
-      <fog attach="fog" args={['#050a1a', 8, 55]} />
-      <ambientLight color="#0a1628" intensity={0.4} />
+      <fog attach="fog" args={['#000', 8, 55]} />
+      <ambientLight color="#050505" intensity={0.4} />
       <pointLight color="#00d4ff" intensity={2.5} position={[0, 0, 3]} distance={18} />
       <pointLight color="#1e3fff" intensity={1.2} position={[2, 2, -8]} distance={35} />
       <pointLight color="#f0a020" intensity={0.4} position={[-4, -2, -4]} distance={20} />

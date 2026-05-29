@@ -52,7 +52,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="min-h-screen flex flex-col bg-[#050a1a] text-white">
+      <body className="min-h-screen flex flex-col bg-[#000000] text-white">
         <SmoothScroll />
         <LoadingScreen />
         <CustomCursor />

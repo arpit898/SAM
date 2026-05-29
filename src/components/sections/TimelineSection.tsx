@@ -12,7 +12,7 @@ export default function TimelineSection() {
   const lineHeight = useTransform(scrollYProgress, [0.05, 0.9], ['0%', '100%']);
 
   return (
-    <section ref={ref} className="relative py-24 bg-[#050a1a] overflow-hidden">
+    <section ref={ref} className="relative py-24 bg-black overflow-hidden">
       <div className="absolute inset-0 blueprint-grid opacity-20" />
 
       <Container>

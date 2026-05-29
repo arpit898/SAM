@@ -25,15 +25,15 @@ export default function TBMSection() {
   const textOpacity = useTransform(scrollYProgress, [0.1, 0.35], [0, 1]);
 
   return (
-    <section ref={ref} className="relative min-h-screen bg-[#050a1a] overflow-hidden flex items-center">
+    <section ref={ref} className="relative min-h-screen bg-black overflow-hidden flex items-center">
       {/* Blueprint grid */}
       <div className="absolute inset-0 blueprint-grid opacity-[0.06]" />
 
       {/* Gradient overlays */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,212,255,0.04), transparent 70%)' }} />
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#050a1a] to-transparent pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#050a1a] to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#000000] to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#000000] to-transparent pointer-events-none" />
 
       <Container className="relative z-10 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">

@@ -30,7 +30,7 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#050a1a] border-t border-white/5 overflow-hidden">
+    <footer className="relative bg-black border-t border-white/5 overflow-hidden">
       <div className="absolute inset-0 blueprint-grid opacity-20" />
 
       {/* Subtle top glow */}

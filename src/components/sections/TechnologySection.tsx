@@ -26,7 +26,7 @@ export default function TechnologySection() {
   const cityY = useTransform(scrollYProgress, [0, 1], ['5%', '-5%']);
 
   return (
-    <section ref={ref} className="relative bg-[#0a1628] overflow-hidden">
+    <section ref={ref} className="relative bg-[#050505] overflow-hidden">
       {/* Blueprint grid background */}
       <div className="absolute inset-0 blueprint-grid opacity-20" />
       <div className="absolute inset-0"

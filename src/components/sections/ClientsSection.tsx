@@ -35,9 +35,9 @@ function Marquee({ items, speed = 40, reverse = false }: {
       </div>
       {/* Edge fades */}
       <div className="absolute left-0 top-0 bottom-0 w-20 pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, #0a1628, transparent)' }} />
+        style={{ background: 'linear-gradient(90deg, #050505, transparent)' }} />
       <div className="absolute right-0 top-0 bottom-0 w-20 pointer-events-none"
-        style={{ background: 'linear-gradient(-90deg, #0a1628, transparent)' }} />
+        style={{ background: 'linear-gradient(-90deg, #050505, transparent)' }} />
     </div>
   );
 }
@@ -60,7 +60,7 @@ export default function ClientsSection() {
   const bgY = useTransform(scrollYProgress, [0, 1], ['-3%', '3%']);
 
   return (
-    <section ref={ref} className="relative py-24 bg-[#0a1628] overflow-hidden">
+    <section ref={ref} className="relative py-24 bg-[#050505] overflow-hidden">
       <motion.div style={{ y: bgY }} className="absolute inset-0 blueprint-grid opacity-15" />
       <div className="absolute inset-0"
         style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,212,255,0.03), transparent 70%)' }} />

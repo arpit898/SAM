@@ -138,7 +138,7 @@ export default function WireframeCity() {
       dpr={[1, 1.5]}
       style={{ width: '100%', height: '100%' }}
     >
-      <fog attach="fog" args={['#050a1a', 10, 30]} />
+      <fog attach="fog" args={['#000000', 10, 30]} />
       <CityGeometry />
       <CityParticles />
     </Canvas>

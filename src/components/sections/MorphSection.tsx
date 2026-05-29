@@ -57,7 +57,7 @@ export default function MorphSection() {
   const current = stages[stage];
 
   return (
-    <section ref={ref} className="relative bg-[#050a1a]" style={{ height: '280vh' }}>
+    <section ref={ref} className="relative bg-black" style={{ height: '280vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden flex items-center">
         {/* Canvas background */}
         <div className="absolute inset-0">
@@ -66,9 +66,9 @@ export default function MorphSection() {
 
         {/* Dark vignette */}
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, #050a1a 85%)' }} />
+          style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, #000000 85%)' }} />
         <div className="absolute left-0 top-0 bottom-0 w-64"
-          style={{ background: 'linear-gradient(90deg, #050a1a 0%, transparent 100%)' }} />
+          style={{ background: 'linear-gradient(90deg, #000000 0%, transparent 100%)' }} />
 
         {/* Blueprint grid overlay */}
         <div className="absolute inset-0 blueprint-grid opacity-10 pointer-events-none" />

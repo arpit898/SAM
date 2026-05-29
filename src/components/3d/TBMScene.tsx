@@ -236,7 +236,7 @@ export default function TBMScene() {
       dpr={[1, 2]}
       style={{ width: '100%', height: '100%' }}
     >
-      <fog attach="fog" args={['#050a1a', 8, 35]} />
+      <fog attach="fog" args={['#000000', 8, 35]} />
       <pointLight color="#00d4ff" intensity={3} position={[0, 0, 3]} distance={15} />
       <pointLight color="#1e4fff" intensity={1.5} position={[0, 0, -5]} distance={25} />
       <Cutterhead />

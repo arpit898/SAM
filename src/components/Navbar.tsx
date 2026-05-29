@@ -59,7 +59,7 @@ export default function Navbar() {
         className={cn(
           'fixed top-0 left-0 right-0 z-50 h-[52px] flex items-center transition-colors duration-500',
           scrolled
-            ? 'border-b border-white/5 bg-[#050a1a]/92 backdrop-blur-xl'
+            ? 'border-b border-white/5 bg-[#000000]/92 backdrop-blur-xl'
             : 'bg-transparent'
         )}
       >
@@ -128,7 +128,7 @@ export default function Navbar() {
         initial={{ clipPath: 'inset(0 0 100% 0)' }}
         animate={{ clipPath: mobileOpen ? 'inset(0 0 0% 0)' : 'inset(0 0 100% 0)' }}
         transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
-        className="fixed inset-0 z-40 bg-[#050a1a] flex flex-col lg:hidden"
+        className="fixed inset-0 z-40 bg-[#000000] flex flex-col lg:hidden"
       >
         {/* Blueprint grid overlay in menu */}
         <div className="absolute inset-0 blueprint-grid opacity-[0.08]" />

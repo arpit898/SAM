@@ -16,7 +16,7 @@ interface CTASectionProps {
 
 export default function CTASection({ tag, title, subtitle, primaryCTA, secondaryCTA, dark = true }: CTASectionProps) {
   return (
-    <section className={`relative py-24 overflow-hidden ${dark ? 'bg-[#050a1a]' : 'bg-[#0a1628]'}`}>
+    <section className={`relative py-24 overflow-hidden ${dark ? 'bg-[#000000]' : 'bg-[#050505]'}`}>
       <div className="absolute inset-0 blueprint-grid opacity-30" />
       <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,212,255,0.06) 0%, transparent 70%)' }} />
 
@@ -41,7 +41,7 @@ export default function CTASection({ tag, title, subtitle, primaryCTA, secondary
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href={primaryCTA.href}
-              className="group inline-flex items-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm uppercase tracking-wider text-[#050a1a] bg-[#00d4ff] hover:bg-white transition-all duration-300"
+              className="group inline-flex items-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm uppercase tracking-wider text-[#000000] bg-[#00d4ff] hover:bg-white transition-all duration-300"
             >
               {primaryCTA.label}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

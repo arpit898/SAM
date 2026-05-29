@@ -60,7 +60,7 @@ export default function CommandCenterSection() {
   const [activeSystem, setActiveSystem] = useState<number | null>(null);
 
   return (
-    <section ref={ref} className="relative py-24 bg-[#050a1a] overflow-hidden">
+    <section ref={ref} className="relative py-24 bg-black overflow-hidden">
       <div className="absolute inset-0 blueprint-grid opacity-30" />
       <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 100% 60% at 50% 50%, rgba(0,212,255,0.04) 0%, transparent 70%)' }} />
 
