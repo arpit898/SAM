@@ -1,16 +1,9 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
 import AnimatedCounter from '@/components/ui/AnimatedCounter';
 import Container from '@/components/ui/Container';
-
-const megaStats = [
-  { value: '1230', prefix: '₹', suffix: 'Cr', label: 'REVENUE FY2025', note: 'Turnover' },
-  { value: '27', prefix: '', suffix: 'Yrs', label: 'FOUNDED 1998', note: 'In operation' },
-  { value: '1400', prefix: '', suffix: '+', label: 'WORKFORCE', note: 'Direct employees' },
-  { value: '10', prefix: '', suffix: '+', label: 'METRO CORPS', note: 'DMRC, MMRDA, CMRL+' },
-];
 
 const contracts = [
   { code: 'EC-01', client: 'DMRC Phase V', value: '₹222.76 Cr', desc: 'Delhi Metro Station, 2026' },
@@ -20,54 +13,115 @@ const contracts = [
 
 export default function StatsSection() {
   const ref = useRef<HTMLDivElement>(null);
-  useScroll({ target: ref, offset: ['start end', 'end start'] });
 
   return (
-    <section ref={ref} className="relative bg-black overflow-hidden py-0">
-      {/* Top divider */}
+    <section ref={ref} className="relative bg-black overflow-hidden">
       <div className="h-px" style={{ background: 'rgba(255,255,255,0.08)' }} />
 
-      {/* Big number grid */}
-      <div className="border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-        <div className="grid grid-cols-2 lg:grid-cols-4 divide-x" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-          {megaStats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.65, delay: i * 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
-              className="py-16 px-8 group"
-              style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+      {/* Primary stat: full-bleed revenue number */}
+      <div className="relative border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr]">
+
+          {/* LEFT: MEGA revenue */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="relative overflow-hidden py-16 px-8 sm:px-14 lg:px-20 border-b lg:border-b-0 lg:border-r"
+            style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+          >
+            {/* Ghost watermark */}
+            <div
+              className="absolute inset-0 flex items-center pointer-events-none select-none"
+              aria-hidden="true"
+              style={{ paddingLeft: '1rem' }}
             >
-              <div
-                className="uppercase mb-3 text-white/30"
-                style={{ fontSize: '9px', letterSpacing: '0.4em', fontFamily: 'var(--font-geist-mono, monospace)' }}
+              <span
+                className="font-black leading-none"
+                style={{
+                  fontSize: 'clamp(180px, 30vw, 400px)',
+                  color: 'rgba(255,215,0,0.04)',
+                  letterSpacing: '-0.05em',
+                }}
               >
-                {s.label}
+                1230
+              </span>
+            </div>
+
+            <div className="relative z-10">
+              <div
+                className="uppercase text-white/25 mb-6 font-mono"
+                style={{ fontSize: '9px', letterSpacing: '0.5em' }}
+              >
+                Revenue FY2025
+              </div>
+              <div className="flex items-start gap-0">
+                <span
+                  className="font-black leading-none mt-2"
+                  style={{ fontSize: 'clamp(18px, 3.5vw, 48px)', color: '#FFD700' }}
+                >
+                  ₹
+                </span>
+                <span
+                  className="font-black text-white leading-none tracking-[-0.04em]"
+                  style={{ fontSize: 'clamp(80px, 16vw, 220px)' }}
+                >
+                  <AnimatedCounter value="1230" suffix="" label="" className="inline" />
+                </span>
               </div>
               <div
-                className="font-black text-white leading-none tracking-[-0.03em]"
-                style={{ fontSize: 'clamp(48px, 7vw, 96px)' }}
+                className="font-black leading-none tracking-[-0.03em]"
+                style={{ fontSize: 'clamp(28px, 5vw, 72px)', color: '#FFD700' }}
               >
-                {s.prefix && (
-                  <span className="text-[0.5em]" style={{ color: '#FFD700' }}>{s.prefix}</span>
-                )}
-                <AnimatedCounter value={s.value} suffix="" label="" delay={i * 0.1} className="inline" />
-                <span className="text-[0.55em] ml-0.5" style={{ color: '#FFD700' }}>{s.suffix}</span>
+                Crore
               </div>
-              <div className="text-[11px] text-white/30 mt-2">{s.note}</div>
-            </motion.div>
-          ))}
+              <div className="text-[11px] text-white/30 mt-4">Active infrastructure portfolio</div>
+            </div>
+          </motion.div>
+
+          {/* RIGHT: three secondary stats stacked */}
+          <div className="grid grid-rows-3 divide-y" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+            {[
+              { value: '27', suffix: ' Yrs', label: 'FOUNDED 1998', note: 'In operation' },
+              { value: '1400', suffix: '+', label: 'WORKFORCE', note: 'Direct employees' },
+              { value: '10', suffix: '+', label: 'METRO CORPS', note: 'DMRC · MMRDA · CMRL+' },
+            ].map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.15 + i * 0.12, ease: [0.21, 0.47, 0.32, 0.98] }}
+                className="px-8 sm:px-12 py-8 flex flex-col justify-center group"
+                style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+              >
+                <div
+                  className="uppercase text-white/25 mb-2 font-mono"
+                  style={{ fontSize: '9px', letterSpacing: '0.4em' }}
+                >
+                  {s.label}
+                </div>
+                <div
+                  className="font-black text-white leading-none tracking-[-0.04em]"
+                  style={{ fontSize: 'clamp(52px, 8vw, 100px)' }}
+                >
+                  <AnimatedCounter value={s.value} suffix="" label="" delay={i * 0.1} className="inline" />
+                  <span style={{ color: '#FFD700', fontSize: '0.6em', marginLeft: '0.05em' }}>{s.suffix}</span>
+                </div>
+                <div className="text-[11px] text-white/30 mt-1">{s.note}</div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Active contracts */}
-      <Container className="py-16">
+      <Container className="py-16 lg:py-20">
         <div className="flex items-center gap-4 mb-10">
           <span
-            className="uppercase text-white/30 flex-shrink-0"
-            style={{ fontSize: '9px', letterSpacing: '0.4em', fontFamily: 'var(--font-geist-mono, monospace)' }}
+            className="uppercase text-white/30 flex-shrink-0 font-mono"
+            style={{ fontSize: '9px', letterSpacing: '0.4em' }}
           >
             Active Contract Portfolio
           </span>
@@ -85,10 +139,13 @@ export default function StatsSection() {
               className="group pt-6 pb-6 sm:px-8 first:pl-0"
               style={{ borderColor: 'rgba(255,255,255,0.08)' }}
             >
-              <div className="border-t pt-6 group-hover:border-[#FFD700] transition-colors duration-300" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div
+                className="border-t pt-6 group-hover:border-[#FFD700] transition-colors duration-300"
+                style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+              >
                 <span
-                  className="text-white/30 uppercase"
-                  style={{ fontSize: '9px', fontFamily: 'var(--font-geist-mono, monospace)', letterSpacing: '0.2em' }}
+                  className="text-white/30 uppercase font-mono"
+                  style={{ fontSize: '9px', letterSpacing: '0.2em' }}
                 >
                   {c.code}
                 </span>
@@ -100,13 +157,12 @@ export default function StatsSection() {
           ))}
         </div>
 
-        {/* CIN strip */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="flex flex-wrap items-center gap-4 mt-10 pt-8 border-t text-[10px] text-white/25"
+          className="flex flex-wrap items-center gap-4 mt-10 pt-8 border-t text-[10px] text-white/20"
           style={{ borderColor: 'rgba(255,255,255,0.08)', fontFamily: 'var(--font-geist-mono, monospace)' }}
         >
           <span>CIN: U70101DL1998PTC091859</span>

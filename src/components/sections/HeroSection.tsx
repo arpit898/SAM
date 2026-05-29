@@ -35,6 +35,29 @@ function Ticker() {
   );
 }
 
+function HUDBrackets() {
+  return (
+    <div className="absolute inset-0 pointer-events-none z-[2]" style={{ padding: '20px' }}>
+      {/* Top-left */}
+      <svg className="absolute top-5 left-5" width="28" height="28" fill="none">
+        <path d="M0 28 L0 0 L28 0" stroke="#FFD700" strokeWidth="1" opacity="0.35" />
+      </svg>
+      {/* Top-right */}
+      <svg className="absolute top-5 right-5" width="28" height="28" fill="none">
+        <path d="M28 28 L28 0 L0 0" stroke="#FFD700" strokeWidth="1" opacity="0.35" />
+      </svg>
+      {/* Bottom-left */}
+      <svg className="absolute bottom-5 left-5" width="28" height="28" fill="none">
+        <path d="M0 0 L0 28 L28 28" stroke="#FFD700" strokeWidth="1" opacity="0.35" />
+      </svg>
+      {/* Bottom-right */}
+      <svg className="absolute bottom-5 right-5" width="28" height="28" fill="none">
+        <path d="M28 0 L28 28 L0 28" stroke="#FFD700" strokeWidth="1" opacity="0.35" />
+      </svg>
+    </div>
+  );
+}
+
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -42,9 +65,9 @@ export default function HeroSection() {
     offset: ['start start', 'end end'],
   });
 
-  const textOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-  const textY = useTransform(scrollYProgress, [0, 0.5], ['0%', '-8%']);
-  const sceneScale = useTransform(scrollYProgress, [0, 0.6], [1, 1.06]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 0.5], ['0%', '-6%']);
+  const sceneScale = useTransform(scrollYProgress, [0, 0.6], [1, 1.05]);
 
   useEffect(() => {
     return scrollYProgress.on('change', (v) => {
@@ -56,155 +79,156 @@ export default function HeroSection() {
     <section ref={containerRef} className="relative bg-black" style={{ height: '200vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden">
 
-        {/* 3D scene: right ~45% on desktop, full BG on mobile */}
-        <motion.div
-          style={{ scale: sceneScale }}
-          className="absolute inset-0 lg:left-[55%] z-0"
-        >
+        {/* 3D scene: full viewport */}
+        <motion.div style={{ scale: sceneScale }} className="absolute inset-0 z-0">
           <InfraSceneClient />
-          {/* Fade edge on desktop */}
-          <div
-            className="hidden lg:block absolute inset-y-0 left-0 w-40 pointer-events-none"
-            style={{ background: 'linear-gradient(90deg, #000 0%, transparent 100%)' }}
-          />
         </motion.div>
 
-        {/* Mobile overlay */}
-        <div className="lg:hidden absolute inset-0 bg-black/60 z-[1] pointer-events-none" />
+        {/* Radial vignette for text readability */}
+        <div
+          className="absolute inset-0 z-[1] pointer-events-none"
+          style={{
+            background: `
+              radial-gradient(ellipse 90% 110% at 20% 55%, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%),
+              linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 30%)
+            `,
+          }}
+        />
 
-        {/* Left text panel ~55% */}
+        {/* HUD corner brackets */}
+        <HUDBrackets />
+
+        {/* Top HUD strip */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="absolute top-0 left-0 right-0 z-[3] flex items-center justify-between px-10 sm:px-16 pointer-events-none"
+          style={{ paddingTop: '88px' }}
+        >
+          <span className="font-mono uppercase text-white/30" style={{ fontSize: '9px', letterSpacing: '0.45em' }}>
+            DELHI · INDIA
+          </span>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FFD700] pulse" />
+            <span className="font-mono uppercase text-white/30" style={{ fontSize: '9px', letterSpacing: '0.45em' }}>
+              LIVE TELEMETRY
+            </span>
+          </div>
+          <span className="font-mono uppercase text-white/30" style={{ fontSize: '9px', letterSpacing: '0.45em' }}>
+            EST. 1998
+          </span>
+        </motion.div>
+
+        {/* Main overlay: headline + CTAs */}
         <motion.div
           style={{ opacity: textOpacity, y: textY }}
-          className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-10 lg:px-16 lg:w-[55%]"
+          className="absolute inset-0 z-[3] flex flex-col justify-center px-8 sm:px-14 lg:px-20 max-w-[900px]"
         >
-          {/* Location label */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="mb-8 lg:mb-10"
-          >
-            <span
-              className="text-white/40 uppercase"
-              style={{ fontSize: '10px', letterSpacing: '0.4em', fontFamily: 'var(--font-geist-mono, monospace)' }}
-            >
-              DELHI, INDIA · EST. 1998
-            </span>
-          </motion.div>
-
-          {/* Headline */}
-          <div className="overflow-hidden mb-1">
-            <motion.div
-              initial={{ y: '105%' }}
-              animate={{ y: '0%' }}
-              transition={{ duration: 1.0, delay: 0.05, ease: [0.76, 0, 0.24, 1] }}
-              className="font-black text-white leading-[0.85] tracking-[-0.04em]"
-              style={{ fontSize: 'clamp(60px, 11vw, 150px)' }}
-            >
-              BUILDING
-            </motion.div>
-          </div>
-          <div className="overflow-hidden mb-1">
-            <motion.div
-              initial={{ y: '105%' }}
-              animate={{ y: '0%' }}
-              transition={{ duration: 1.0, delay: 0.18, ease: [0.76, 0, 0.24, 1] }}
-              className="font-black leading-[0.85] tracking-[-0.04em]"
-              style={{ fontSize: 'clamp(60px, 11vw, 150px)', color: '#FFD700' }}
-            >
-              INDIA&apos;S
-            </motion.div>
-          </div>
-          <div className="overflow-hidden">
-            <motion.div
-              initial={{ y: '105%' }}
-              animate={{ y: '0%' }}
-              transition={{ duration: 1.0, delay: 0.32, ease: [0.76, 0, 0.24, 1] }}
-              className="font-black text-white leading-[0.85] tracking-[-0.04em]"
-              style={{ fontSize: 'clamp(60px, 11vw, 150px)' }}
-            >
-              FUTURE.
-            </motion.div>
+          {/* Staggered diagonal headline */}
+          <div className="select-none">
+            <div className="overflow-hidden">
+              <motion.div
+                initial={{ y: '108%' }}
+                animate={{ y: '0%' }}
+                transition={{ duration: 1.05, delay: 0.08, ease: [0.76, 0, 0.24, 1] }}
+                className="font-black text-white leading-[0.87] tracking-[-0.04em]"
+                style={{ fontSize: 'clamp(68px, 13vw, 168px)' }}
+              >
+                BUILDING
+              </motion.div>
+            </div>
+            <div className="overflow-hidden">
+              <motion.div
+                initial={{ y: '108%' }}
+                animate={{ y: '0%' }}
+                transition={{ duration: 1.05, delay: 0.2, ease: [0.76, 0, 0.24, 1] }}
+                className="font-black leading-[0.87] tracking-[-0.04em]"
+                style={{ fontSize: 'clamp(68px, 13vw, 168px)', color: '#FFD700', marginLeft: '7%' }}
+              >
+                INDIA&apos;S
+              </motion.div>
+            </div>
+            <div className="overflow-hidden">
+              <motion.div
+                initial={{ y: '108%' }}
+                animate={{ y: '0%' }}
+                transition={{ duration: 1.05, delay: 0.34, ease: [0.76, 0, 0.24, 1] }}
+                className="font-black text-white leading-[0.87] tracking-[-0.04em]"
+                style={{ fontSize: 'clamp(68px, 13vw, 168px)', marginLeft: '3%' }}
+              >
+                FUTURE.
+              </motion.div>
+            </div>
           </div>
 
-          {/* Description */}
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.65 }}
-            className="mt-7 text-[13px] text-white/50 leading-relaxed max-w-[420px]"
+            transition={{ duration: 0.7, delay: 0.68 }}
+            className="mt-7 text-[13px] text-white/45 leading-relaxed max-w-[400px]"
           >
             ₹1,230 Crore in active infrastructure. Metro, industrial, institutional, power — since 1998.
           </motion.p>
 
-          {/* Inline stats */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.82 }}
-            className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1"
-          >
-            {['27 YRS', '₹1,230 CR', '1,400+ PEOPLE', '10+ METRO CORPS'].map((stat, i) => (
-              <span key={i} className="flex items-center gap-4">
-                {i > 0 && <span className="text-white/15 text-[10px]">|</span>}
-                <span
-                  className="text-white/40 uppercase"
-                  style={{ fontSize: '10px', letterSpacing: '0.15em', fontFamily: 'var(--font-geist-mono, monospace)' }}
-                >
-                  {stat}
-                </span>
-              </span>
-            ))}
-          </motion.div>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.0 }}
+            transition={{ duration: 0.6, delay: 0.88 }}
             className="mt-8 flex items-center gap-4"
           >
             <a
               href="/projects"
-              className="inline-flex items-center gap-2 px-6 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-black rounded transition-all duration-200 hover:opacity-90"
-              style={{ background: '#FF4D00' }}
+              className="inline-flex items-center gap-2 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.2em] text-black transition-all duration-200 hover:opacity-90 active:scale-95"
+              style={{ background: '#FFD700' }}
             >
               View Projects
             </a>
             <a
               href="/about"
-              className="inline-flex items-center gap-2 px-6 py-3 text-[11px] font-black uppercase tracking-[0.2em] border border-white/20 text-white rounded hover:border-white/50 transition-colors duration-200"
+              className="inline-flex items-center gap-2 px-6 py-3 text-[11px] font-black uppercase tracking-[0.2em] border border-white/20 text-white hover:border-[#FFD700]/50 hover:text-[#FFD700] transition-all duration-200"
             >
               Our Story
             </a>
           </motion.div>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Bottom HUD strip */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.4 }}
-          className="absolute bottom-8 left-6 sm:left-10 lg:left-16 z-20 flex items-center gap-3"
+          transition={{ delay: 1.3 }}
+          className="absolute bottom-14 left-8 sm:left-14 right-8 sm:right-14 z-[3] flex items-end justify-between pointer-events-none"
         >
-          <div className="relative h-10 w-px bg-white/10 overflow-hidden">
-            <motion.div
-              className="absolute top-0 w-full"
-              style={{ height: '35%', background: '#FFD700' }}
-              animate={{ y: ['0%', '300%'] }}
-              transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-            />
+          <div className="flex items-center gap-3">
+            <div className="relative h-10 w-px bg-white/10 overflow-hidden">
+              <motion.div
+                className="absolute top-0 w-full"
+                style={{ height: '35%', background: '#FFD700' }}
+                animate={{ y: ['0%', '300%'] }}
+                transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+              />
+            </div>
+            <span className="font-mono uppercase text-white/25" style={{ fontSize: '9px', letterSpacing: '0.4em' }}>
+              SCROLL
+            </span>
           </div>
-          <span
-            className="uppercase text-white/40"
-            style={{ fontSize: '9px', letterSpacing: '0.4em', fontFamily: 'var(--font-geist-mono, monospace)' }}
-          >
-            Scroll
+
+          <div className="hidden sm:flex items-center gap-6">
+            {['₹1,230 CR', '1,400+ PEOPLE', '27 YEARS'].map((s, i) => (
+              <span key={i} className="font-mono uppercase text-white/20" style={{ fontSize: '9px', letterSpacing: '0.2em' }}>
+                {s}
+              </span>
+            ))}
+          </div>
+
+          <span className="font-mono uppercase text-white/20" style={{ fontSize: '9px', letterSpacing: '0.3em' }}>
+            28.6139°N · 77.2090°E
           </span>
         </motion.div>
       </div>
 
-      {/* Ticker at bottom of sticky area */}
+      {/* Ticker */}
       <div className="sticky top-[calc(100vh-46px)] z-20">
         <Ticker />
       </div>

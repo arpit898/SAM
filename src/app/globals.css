@@ -16,7 +16,6 @@
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { overflow-x: hidden; scroll-behavior: auto; }
 
 body {
@@ -27,42 +26,60 @@ body {
   overflow-x: hidden;
 }
 
-/* Scrollbar: thin, gold */
+/* Custom cursor on desktop */
+@media (hover: hover) { body { cursor: none; } }
+
+/* Scrollbar: gold hairline */
 ::-webkit-scrollbar { width: 2px; }
 ::-webkit-scrollbar-track { background: #000; }
 ::-webkit-scrollbar-thumb { background: #FFD700; }
 
 /* Selection */
-::selection { background: #FFD70033; }
+::selection { background: rgba(255,215,0,0.18); }
 
-/* Custom cursor on desktop */
-@media (hover: hover) { body { cursor: none; } }
+/* ─── Overlays ─────────────────────────────────────────────── */
 
 /* Film grain */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 9990;
+  z-index: 9985;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 150px 150px;
 }
 
-/* Marquee */
-@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+/* Scan lines */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9984;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.035) 2px,
+    rgba(0, 0, 0, 0.035) 4px
+  );
+}
+
+/* ─── Marquee ─────────────────────────────────────────────── */
+@keyframes marquee     { 0% { transform: translateX(0); }    100% { transform: translateX(-50%); } }
 @keyframes marquee-rev { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-.marquee { animation: marquee linear infinite; width: max-content; }
-.marquee-rev { animation: marquee-rev linear infinite; width: max-content; }
-.marquee:hover, .marquee-rev:hover { animation-play-state: paused; }
 
-/* Legacy alias */
-.marquee-reverse { animation: marquee-rev linear infinite; width: max-content; }
-.marquee-reverse:hover { animation-play-state: paused; }
+.marquee          { animation: marquee     linear infinite; width: max-content; }
+.marquee-rev      { animation: marquee-rev linear infinite; width: max-content; }
+.marquee-reverse  { animation: marquee-rev linear infinite; width: max-content; }
 
-/* Gradient text gold */
+.marquee:hover, .marquee-rev:hover, .marquee-reverse:hover { animation-play-state: paused; }
+
+/* ─── Typography utilities ─────────────────────────────────── */
 .text-gold { color: #FFD700; }
+
 .grad-gold {
   background: linear-gradient(135deg, #FFD700, #FF8C00);
   -webkit-background-clip: text;
@@ -70,10 +87,29 @@ body::after {
   background-clip: text;
 }
 
-/* Pulse for live dots */
-@keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+/* ─── Animations ─────────────────────────────────────────── */
+@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 .pulse { animation: pulse 2s ease-in-out infinite; }
 
-/* No scrollbar util */
+@keyframes scan-line {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* ─── Blueprint grid (sections) ─────────────────────────── */
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ─── Glass card ─────────────────────────────────────────── */
+.glass {
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(12px);
+}
+
+/* ─── Scrollbar hide util ─────────────────────────────────── */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

@@ -1,81 +1,70 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { clients } from '@/data/clients';
 import Container from '@/components/ui/Container';
 
-function MarqueeRow({ items, speed = 40, reverse = false }: {
-  items: typeof clients;
-  speed?: number;
-  reverse?: boolean;
-}) {
-  const doubled = [...items, ...items];
-  const cls = reverse ? 'marquee-reverse' : 'marquee';
-  return (
-    <div className="relative overflow-hidden">
-      <div className={`flex gap-3 ${cls}`} style={{ animationDuration: `${speed}s` }}>
-        {doubled.map((client, i) => (
-          <div
-            key={i}
-            className="flex-shrink-0 rounded-xl px-5 py-3 border flex items-center gap-3 group cursor-default transition-colors duration-300"
-            style={{
-              background: '#0A0A0A',
-              borderColor: 'rgba(255,255,255,0.06)',
-            }}
-          >
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 border"
-              style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}
-            >
-              <span
-                className="font-black text-white/40"
-                style={{ fontSize: '9px', letterSpacing: '0.05em' }}
-              >
-                {client.logoPlaceholder}
-              </span>
-            </div>
-            <div>
-              <div className="text-[11px] font-semibold text-white/80 whitespace-nowrap">{client.name}</div>
-              <div
-                className="uppercase text-white/30"
-                style={{ fontSize: '9px', letterSpacing: '0.1em', fontFamily: 'var(--font-geist-mono, monospace)' }}
-              >
-                {client.sector}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="absolute left-0 top-0 bottom-0 w-20 pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, #000, transparent)' }} />
-      <div className="absolute right-0 top-0 bottom-0 w-20 pointer-events-none"
-        style={{ background: 'linear-gradient(-90deg, #000, transparent)' }} />
-    </div>
-  );
-}
+const W = 800;
+const H = 520;
+const CX = 400;
+const CY = 260;
 
-const sectorTags = [
-  'Metro Rail',
-  'Central Govt / CPWD',
-  'Airports (AAI)',
-  'Indian Railways',
-  'Defence / MES',
-  'State PWD',
-  'Healthcare',
-  'Industrial',
-  'Real Estate',
+const SECTOR_NODES = [
+  {
+    id: 'metro', label: 'METRO RAIL', x: 400, y: 115,
+    clients: [
+      { label: 'DMRC', x: 318, y: 48 },
+      { label: 'MMRDA', x: 400, y: 36 },
+      { label: 'CMRL', x: 482, y: 48 },
+    ],
+  },
+  {
+    id: 'airports', label: 'AIRPORTS', x: 528, y: 188,
+    clients: [
+      { label: 'AAI', x: 612, y: 148 },
+      { label: 'NIAL', x: 650, y: 204 },
+    ],
+  },
+  {
+    id: 'railways', label: 'RAILWAYS', x: 528, y: 332,
+    clients: [
+      { label: 'RITES', x: 650, y: 316 },
+      { label: 'IRCON', x: 612, y: 372 },
+    ],
+  },
+  {
+    id: 'defence', label: 'DEFENCE', x: 400, y: 405,
+    clients: [
+      { label: 'MES', x: 318, y: 472 },
+      { label: 'DRDO', x: 400, y: 484 },
+      { label: 'BEL', x: 482, y: 472 },
+    ],
+  },
+  {
+    id: 'health', label: 'HEALTHCARE', x: 272, y: 332,
+    clients: [
+      { label: 'AIIMS', x: 150, y: 372 },
+      { label: 'PGI', x: 188, y: 316 },
+    ],
+  },
+  {
+    id: 'industrial', label: 'INDUSTRIAL', x: 272, y: 188,
+    clients: [
+      { label: 'NTPC', x: 188, y: 148 },
+      { label: 'BHEL', x: 150, y: 204 },
+    ],
+  },
 ];
 
 export default function ClientsSection() {
   return (
     <section className="relative py-24 bg-black overflow-hidden">
       <Container className="relative z-10">
-        {/* Header — left-aligned editorial */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-16"
+          className="mb-14"
         >
           <span
             className="uppercase text-white/30 block mb-4 font-mono"
@@ -101,54 +90,155 @@ export default function ClientsSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-white/40 max-w-lg text-sm leading-relaxed mt-4"
+            className="text-white/40 max-w-md text-sm leading-relaxed mt-4"
           >
             From metro rail corporations and central government agencies to defence establishments and industrial leaders.
           </motion.p>
         </motion.div>
 
-        {/* Marquee rows */}
-        <div className="space-y-3">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <MarqueeRow items={clients} speed={35} />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <MarqueeRow items={[...clients].reverse()} speed={28} reverse />
-          </motion.div>
-        </div>
-
-        {/* Sector tags */}
+        {/* Network Constellation */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap gap-2 mt-12"
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="relative w-full max-w-3xl mx-auto"
         >
-          {sectorTags.map((s) => (
-            <span
-              key={s}
-              className="uppercase px-3 py-1.5 border text-white/40 hover:text-white/70 hover:border-[#FFD700]/30 transition-all duration-200 cursor-default"
-              style={{
-                fontSize: '9px',
-                letterSpacing: '0.25em',
-                fontFamily: 'var(--font-geist-mono, monospace)',
-                borderColor: 'rgba(255,255,255,0.10)',
-              }}
+          <svg
+            viewBox={`0 0 ${W} ${H}`}
+            className="w-full h-auto"
+            style={{ overflow: 'visible' }}
+          >
+            <defs>
+              <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#FFD700" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#FFD700" stopOpacity="0" />
+              </radialGradient>
+              <filter id="nodeGlow">
+                <feGaussianBlur stdDeviation="2.5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* Center ambient glow */}
+            <circle cx={CX} cy={CY} r="90" fill="url(#hubGlow)" />
+
+            {/* Lines: hub → sector */}
+            {SECTOR_NODES.map((node, i) => (
+              <motion.path
+                key={`hub-${node.id}`}
+                d={`M${CX},${CY} L${node.x},${node.y}`}
+                stroke="#FFD700"
+                strokeWidth="0.7"
+                fill="none"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 0.35 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.9, delay: 0.25 + i * 0.07, ease: 'easeInOut' }}
+              />
+            ))}
+
+            {/* Lines: sector → clients */}
+            {SECTOR_NODES.flatMap((node, si) =>
+              node.clients.map((client, ci) => (
+                <motion.path
+                  key={`sector-client-${node.id}-${ci}`}
+                  d={`M${node.x},${node.y} L${client.x},${client.y}`}
+                  stroke="rgba(255,255,255,1)"
+                  strokeWidth="0.5"
+                  fill="none"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  whileInView={{ pathLength: 1, opacity: 0.14 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, delay: 0.7 + si * 0.1 + ci * 0.05, ease: 'easeInOut' }}
+                />
+              ))
+            )}
+
+            {/* Client nodes */}
+            {SECTOR_NODES.flatMap((node, si) =>
+              node.clients.map((client, ci) => (
+                <motion.g
+                  key={`client-${node.id}-${ci}`}
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: 1.0 + si * 0.1 + ci * 0.05, ease: [0.34, 1.56, 0.64, 1] }}
+                  style={{ originX: client.x, originY: client.y, transformBox: 'fill-box', transformOrigin: `${client.x}px ${client.y}px` }}
+                >
+                  <circle cx={client.x} cy={client.y} r="11" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.18)" strokeWidth="0.5" />
+                  <circle cx={client.x} cy={client.y} r="2.5" fill="rgba(255,255,255,0.55)" />
+                  <text
+                    x={client.x}
+                    y={client.y + 21}
+                    textAnchor="middle"
+                    fill="rgba(255,255,255,0.32)"
+                    style={{ fontSize: '8px', fontFamily: 'monospace', letterSpacing: '0.04em' }}
+                  >
+                    {client.label}
+                  </text>
+                </motion.g>
+              ))
+            )}
+
+            {/* Sector nodes */}
+            {SECTOR_NODES.map((node, i) => (
+              <motion.g
+                key={`sector-${node.id}`}
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.5 + i * 0.09, ease: [0.34, 1.56, 0.64, 1] }}
+                style={{ transformOrigin: `${node.x}px ${node.y}px` }}
+              >
+                <circle cx={node.x} cy={node.y} r="22" fill="rgba(255,215,0,0.07)" stroke="#FFD700" strokeWidth="0.8" strokeOpacity="0.55" />
+                <circle cx={node.x} cy={node.y} r="5" fill="#FFD700" opacity="0.85" filter="url(#nodeGlow)" />
+                <text
+                  x={node.x}
+                  y={node.y + 34}
+                  textAnchor="middle"
+                  fill="rgba(255,255,255,0.55)"
+                  style={{ fontSize: '8.5px', fontFamily: 'monospace', letterSpacing: '0.1em' }}
+                >
+                  {node.label}
+                </text>
+              </motion.g>
+            ))}
+
+            {/* Central hub */}
+            <motion.g
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] }}
+              style={{ transformOrigin: `${CX}px ${CY}px` }}
             >
-              {s}
-            </span>
-          ))}
+              {/* Pulsing outer ring */}
+              <motion.circle
+                cx={CX} cy={CY} r="46"
+                fill="none"
+                stroke="#FFD700"
+                strokeWidth="0.5"
+                strokeOpacity="0.25"
+                animate={{ r: [46, 56, 46], strokeOpacity: [0.25, 0.1, 0.25] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <circle cx={CX} cy={CY} r="36" fill="rgba(255,215,0,0.09)" stroke="#FFD700" strokeWidth="1" strokeOpacity="0.7" filter="url(#nodeGlow)" />
+              <circle cx={CX} cy={CY} r="9" fill="#FFD700" />
+              <text
+                x={CX}
+                y={CY - 46}
+                textAnchor="middle"
+                fill="#FFD700"
+                style={{ fontSize: '9.5px', fontFamily: 'monospace', letterSpacing: '0.22em', fontWeight: 'bold' }}
+              >
+                SAM INDIA
+              </text>
+            </motion.g>
+          </svg>
         </motion.div>
 
         <motion.p
@@ -156,7 +246,7 @@ export default function ClientsSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="text-[10px] text-white/20 mt-8 italic"
+          className="text-[10px] text-white/20 mt-8 italic text-center"
           style={{ fontFamily: 'var(--font-geist-mono, monospace)' }}
         >
           Client logos to be added after verification and approval.
