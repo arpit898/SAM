@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import HeroSection from '@/components/sections/HeroSection';
 import StatsSection from '@/components/sections/StatsSection';
 import SectorsSection from '@/components/sections/SectorsSection';
+import ScrollStorySection from '@/components/sections/ScrollStorySection';
 import ProjectsPreviewSection from '@/components/sections/ProjectsPreviewSection';
+import TechPlatformSection from '@/components/sections/TechPlatformSection';
 import ClientsSection from '@/components/sections/ClientsSection';
 import CTASection from '@/components/ui/CTASection';
 
@@ -17,8 +19,10 @@ export default function HomePage() {
     <>
       <HeroSection />
       <StatsSection />
+      <ScrollStorySection />
       <SectorsSection />
       <ProjectsPreviewSection />
+      <TechPlatformSection />
       <ClientsSection />
       <CTASection
         tag="Join Our Team"
