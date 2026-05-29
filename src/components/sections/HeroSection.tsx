@@ -2,28 +2,48 @@
 
 import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import InfraSceneClient from '@/components/3d/InfraSceneClient';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const tickerItems = [
-  'DMRC', '·', '₹222 CR', '·',
-  'MMRDA', '·', '₹547 CR', '·',
-  'CMRL', '·', '₹665 CR', '·',
+  'DMRC PHASE V', '·', '₹222 CR', '·',
+  'MMRDA MUMBAI', '·', '₹547 CR', '·',
+  'CMRL CHENNAI', '·', '₹665 CR', '·',
   '27 YEARS', '·', '1,400+ WORKFORCE', '·',
-  '10+ METRO CORPS', '·',
+  '10+ METRO CORPS', '·', '₹1,230 CR ACTIVE', '·',
+  'ISO 9001:2015', '·', 'METRO · INDUSTRIAL · INSTITUTIONAL', '·',
+];
+
+const hudData = [
+  { label: 'Active Projects', value: '3', unit: 'ONGOING' },
+  { label: 'Contract Value', value: '₹1,230', unit: 'CR ACTIVE' },
+  { label: 'Workforce', value: '1,400+', unit: 'PEOPLE' },
+  { label: 'Years Operating', value: '27', unit: 'SINCE 1998' },
 ];
 
 function Ticker() {
   const doubled = [...tickerItems, ...tickerItems];
   return (
-    <div className="relative overflow-hidden bg-black border-t border-white/8 py-3">
-      <div className="marquee flex gap-6" style={{ animationDuration: '30s' }}>
+    <div className="relative overflow-hidden bg-black border-t border-[rgba(255,215,0,0.08)] py-3">
+      <div
+        className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, #000, transparent)' }}
+      />
+      <div
+        className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+        style={{ background: 'linear-gradient(-90deg, #000, transparent)' }}
+      />
+      <div className="marquee flex gap-8" style={{ animationDuration: '35s' }}>
         {doubled.map((t, i) => (
           <span
             key={i}
-            className="flex-shrink-0 text-[10px] font-black uppercase"
+            className="flex-shrink-0 text-[9px] font-black uppercase"
             style={{
-              letterSpacing: '0.3em',
-              color: t === '·' ? 'rgba(255,255,255,0.15)' : '#FFD700',
+              letterSpacing: '0.35em',
+              color: t === '·' ? 'rgba(255,255,255,0.12)' : '#FFD700',
               fontFamily: 'var(--font-geist-mono, monospace)',
             }}
           >
@@ -35,26 +55,18 @@ function Ticker() {
   );
 }
 
-function HUDBrackets() {
+function HUDPanel({ data, delay }: { data: typeof hudData[0]; delay: number }) {
   return (
-    <div className="absolute inset-0 pointer-events-none z-[2]" style={{ padding: '20px' }}>
-      {/* Top-left */}
-      <svg className="absolute top-5 left-5" width="28" height="28" fill="none">
-        <path d="M0 28 L0 0 L28 0" stroke="#FFD700" strokeWidth="1" opacity="0.35" />
-      </svg>
-      {/* Top-right */}
-      <svg className="absolute top-5 right-5" width="28" height="28" fill="none">
-        <path d="M28 28 L28 0 L0 0" stroke="#FFD700" strokeWidth="1" opacity="0.35" />
-      </svg>
-      {/* Bottom-left */}
-      <svg className="absolute bottom-5 left-5" width="28" height="28" fill="none">
-        <path d="M0 0 L0 28 L28 28" stroke="#FFD700" strokeWidth="1" opacity="0.35" />
-      </svg>
-      {/* Bottom-right */}
-      <svg className="absolute bottom-5 right-5" width="28" height="28" fill="none">
-        <path d="M28 0 L28 28 L0 28" stroke="#FFD700" strokeWidth="1" opacity="0.35" />
-      </svg>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay }}
+      className="hud-panel min-w-[110px]"
+    >
+      <div className="text-[7px] tracking-[0.3em] text-white/30 uppercase mb-1 font-mono">{data.label}</div>
+      <div className="text-[22px] font-black text-white leading-none tracking-[-0.02em]">{data.value}</div>
+      <div className="text-[7px] tracking-[0.2em] text-[#FFD700]/60 uppercase mt-1 font-mono">{data.unit}</div>
+    </motion.div>
   );
 }
 
@@ -67,7 +79,7 @@ export default function HeroSection() {
 
   const textOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
   const textY = useTransform(scrollYProgress, [0, 0.5], ['0%', '-6%']);
-  const sceneScale = useTransform(scrollYProgress, [0, 0.6], [1, 1.05]);
+  const sceneScale = useTransform(scrollYProgress, [0, 0.7], [1, 1.08]);
 
   useEffect(() => {
     return scrollYProgress.on('change', (v) => {
@@ -75,157 +87,195 @@ export default function HeroSection() {
     });
   }, [scrollYProgress]);
 
+  // GSAP: animate headline letters on load
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from('.hero-char', {
+        y: 120,
+        opacity: 0,
+        stagger: 0.025,
+        duration: 0.9,
+        ease: 'power4.out',
+        delay: 0.5,
+      });
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
+
+  const headline = ['BUILDING', "INDIA'S", 'FUTURE.'];
+
   return (
-    <section ref={containerRef} className="relative bg-black" style={{ height: '200vh' }}>
+    <section ref={containerRef} className="relative bg-black" style={{ height: '220vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden">
 
-        {/* 3D scene: full viewport */}
-        <motion.div style={{ scale: sceneScale }} className="absolute inset-0 z-0">
+        {/* 3D scene */}
+        <motion.div style={{ scale: sceneScale }} className="absolute inset-0 lg:left-[52%] z-0">
           <InfraSceneClient />
+          {/* Fade left edge */}
+          <div
+            className="hidden lg:block absolute inset-y-0 left-0 w-48 pointer-events-none"
+            style={{ background: 'linear-gradient(90deg, #000 0%, transparent 100%)' }}
+          />
+          {/* Grid overlay on 3D */}
+          <div className="absolute inset-0 wire-grid opacity-20 pointer-events-none" />
         </motion.div>
 
-        {/* Radial vignette for text readability */}
-        <div
-          className="absolute inset-0 z-[1] pointer-events-none"
-          style={{
-            background: `
-              radial-gradient(ellipse 90% 110% at 20% 55%, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%),
-              linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 30%)
-            `,
-          }}
-        />
+        {/* Mobile overlay */}
+        <div className="lg:hidden absolute inset-0 bg-black/65 z-[1] pointer-events-none" />
 
-        {/* HUD corner brackets */}
-        <HUDBrackets />
-
-        {/* Top HUD strip */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="absolute top-0 left-0 right-0 z-[3] flex items-center justify-between px-10 sm:px-16 pointer-events-none"
-          style={{ paddingTop: '88px' }}
-        >
-          <span className="font-mono uppercase text-white/30" style={{ fontSize: '9px', letterSpacing: '0.45em' }}>
-            DELHI · INDIA
-          </span>
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FFD700] pulse" />
-            <span className="font-mono uppercase text-white/30" style={{ fontSize: '9px', letterSpacing: '0.45em' }}>
-              LIVE TELEMETRY
-            </span>
-          </div>
-          <span className="font-mono uppercase text-white/30" style={{ fontSize: '9px', letterSpacing: '0.45em' }}>
-            EST. 1998
-          </span>
-        </motion.div>
-
-        {/* Main overlay: headline + CTAs */}
+        {/* Left text panel */}
         <motion.div
           style={{ opacity: textOpacity, y: textY }}
-          className="absolute inset-0 z-[3] flex flex-col justify-center px-8 sm:px-14 lg:px-20 max-w-[900px]"
+          className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-10 lg:px-16 lg:w-[55%]"
         >
-          {/* Staggered diagonal headline */}
-          <div className="select-none">
-            <div className="overflow-hidden">
-              <motion.div
-                initial={{ y: '108%' }}
-                animate={{ y: '0%' }}
-                transition={{ duration: 1.05, delay: 0.08, ease: [0.76, 0, 0.24, 1] }}
-                className="font-black text-white leading-[0.87] tracking-[-0.04em]"
-                style={{ fontSize: 'clamp(68px, 13vw, 168px)' }}
-              >
-                BUILDING
-              </motion.div>
-            </div>
-            <div className="overflow-hidden">
-              <motion.div
-                initial={{ y: '108%' }}
-                animate={{ y: '0%' }}
-                transition={{ duration: 1.05, delay: 0.2, ease: [0.76, 0, 0.24, 1] }}
-                className="font-black leading-[0.87] tracking-[-0.04em]"
-                style={{ fontSize: 'clamp(68px, 13vw, 168px)', color: '#FFD700', marginLeft: '7%' }}
-              >
-                INDIA&apos;S
-              </motion.div>
-            </div>
-            <div className="overflow-hidden">
-              <motion.div
-                initial={{ y: '108%' }}
-                animate={{ y: '0%' }}
-                transition={{ duration: 1.05, delay: 0.34, ease: [0.76, 0, 0.24, 1] }}
-                className="font-black text-white leading-[0.87] tracking-[-0.04em]"
-                style={{ fontSize: 'clamp(68px, 13vw, 168px)', marginLeft: '3%' }}
-              >
-                FUTURE.
-              </motion.div>
-            </div>
+          {/* Location badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mb-8 lg:mb-10 flex items-center gap-3"
+          >
+            <div className="h-px w-8 bg-[#FFD700]/40" />
+            <span
+              className="text-white/35 uppercase font-mono"
+              style={{ fontSize: '9px', letterSpacing: '0.4em' }}
+            >
+              DELHI, INDIA · EST. 1998
+            </span>
+          </motion.div>
+
+          {/* Headline — GSAP animated characters */}
+          <div className="mb-6">
+            {headline.map((word, wi) => (
+              <div key={wi} className="overflow-hidden">
+                <div className="flex" style={{ fontSize: 'clamp(52px, 9.5vw, 130px)' }}>
+                  {word.split('').map((char, ci) => (
+                    <span
+                      key={ci}
+                      className={`hero-char font-black leading-[0.88] tracking-[-0.04em] ${
+                        wi === 1 ? 'text-[#FFD700]' : 'text-white'
+                      }`}
+                      style={{ display: 'inline-block' }}
+                    >
+                      {char === ' ' ? ' ' : char}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.68 }}
-            className="mt-7 text-[13px] text-white/45 leading-relaxed max-w-[400px]"
+            transition={{ duration: 0.7, delay: 0.9 }}
+            className="text-[12px] text-white/40 leading-relaxed max-w-[380px] mb-8 font-mono"
           >
-            ₹1,230 Crore in active infrastructure. Metro, industrial, institutional, power — since 1998.
+            ₹1,230 Crore in active infrastructure across metros, industrial, institutional and
+            power projects. Delivering India&apos;s backbone since 1998.
           </motion.p>
 
+          {/* HUD data panels */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
+            className="hidden lg:flex flex-wrap gap-3 mb-8"
+          >
+            {hudData.map((d, i) => (
+              <HUDPanel key={i} data={d} delay={1.1 + i * 0.1} />
+            ))}
+          </motion.div>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.88 }}
-            className="mt-8 flex items-center gap-4"
+            transition={{ duration: 0.6, delay: 1.3 }}
+            className="flex items-center gap-4"
           >
             <a
               href="/projects"
-              className="inline-flex items-center gap-2 px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.2em] text-black transition-all duration-200 hover:opacity-90 active:scale-95"
+              className="relative inline-flex items-center gap-3 px-7 py-3.5 text-[9px] font-black uppercase tracking-[0.25em] text-black overflow-hidden group"
               style={{ background: '#FFD700' }}
             >
-              View Projects
+              <span className="relative z-10">View Projects</span>
+              <span className="relative z-10 text-[8px]">→</span>
+              <div className="absolute inset-0 bg-[#FF4D00] translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-300 ease-out" />
             </a>
             <a
               href="/about"
-              className="inline-flex items-center gap-2 px-6 py-3 text-[11px] font-black uppercase tracking-[0.2em] border border-white/20 text-white hover:border-[#FFD700]/50 hover:text-[#FFD700] transition-all duration-200"
+              className="inline-flex items-center gap-3 px-7 py-3.5 text-[9px] font-black uppercase tracking-[0.25em] border border-white/15 text-white/70 hover:border-[#FFD700]/40 hover:text-white transition-all duration-300"
             >
               Our Story
             </a>
           </motion.div>
         </motion.div>
 
-        {/* Bottom HUD strip */}
+        {/* Right side HUD overlay — desktop only */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 1.5 }}
+          className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 z-20 flex-col gap-3"
+        >
+          {/* Vertical status indicator */}
+          <div className="flex flex-col items-center gap-2">
+            <div
+              className="h-20 w-px"
+              style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,215,0,0.4), transparent)' }}
+            />
+            <div className="w-1.5 h-1.5 rounded-full bg-[#00FF88] pulse" />
+            <div
+              className="h-20 w-px"
+              style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,215,0,0.2), transparent)' }}
+            />
+          </div>
+          <div className="-rotate-90 origin-center whitespace-nowrap">
+            <span className="text-[7px] tracking-[0.4em] text-white/20 uppercase font-mono">
+              RENDERING 3D ENGINE
+            </span>
+          </div>
+        </motion.div>
+
+        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.3 }}
-          className="absolute bottom-14 left-8 sm:left-14 right-8 sm:right-14 z-[3] flex items-end justify-between pointer-events-none"
+          transition={{ delay: 1.8 }}
+          className="absolute bottom-20 left-6 sm:left-10 lg:left-16 z-20 flex items-center gap-3"
         >
-          <div className="flex items-center gap-3">
-            <div className="relative h-10 w-px bg-white/10 overflow-hidden">
-              <motion.div
-                className="absolute top-0 w-full"
-                style={{ height: '35%', background: '#FFD700' }}
-                animate={{ y: ['0%', '300%'] }}
-                transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-              />
-            </div>
-            <span className="font-mono uppercase text-white/25" style={{ fontSize: '9px', letterSpacing: '0.4em' }}>
-              SCROLL
-            </span>
+          <div className="relative h-12 w-px bg-white/8 overflow-hidden">
+            <motion.div
+              className="absolute top-0 w-full"
+              style={{
+                height: '40%',
+                background: 'linear-gradient(180deg, transparent, #FFD700, transparent)',
+              }}
+              animate={{ y: ['0%', '250%'] }}
+              transition={{ repeat: Infinity, duration: 2.0, ease: 'easeInOut' }}
+            />
           </div>
-
-          <div className="hidden sm:flex items-center gap-6">
-            {['₹1,230 CR', '1,400+ PEOPLE', '27 YEARS'].map((s, i) => (
-              <span key={i} className="font-mono uppercase text-white/20" style={{ fontSize: '9px', letterSpacing: '0.2em' }}>
-                {s}
-              </span>
-            ))}
-          </div>
-
-          <span className="font-mono uppercase text-white/20" style={{ fontSize: '9px', letterSpacing: '0.3em' }}>
-            28.6139°N · 77.2090°E
+          <span
+            className="uppercase text-white/30 font-mono"
+            style={{ fontSize: '8px', letterSpacing: '0.4em' }}
+          >
+            SCROLL
           </span>
         </motion.div>
+
+        {/* Corner HUD decorations */}
+        <div className="hidden lg:block absolute bottom-20 right-8 z-20">
+          <div className="relative w-24 h-12 border border-white/5">
+            <div className="absolute -top-1 -left-1 w-3 h-3 border-t border-l border-[#FFD700]/40" />
+            <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b border-r border-[#FFD700]/40" />
+            <div className="p-2 flex flex-col gap-1">
+              <div className="text-[6px] tracking-[0.3em] text-white/20 uppercase font-mono">COORD</div>
+              <div className="text-[7px] text-[#FFD700]/50 font-mono">28.6139°N 77.2090°E</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Ticker */}
