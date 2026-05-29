@@ -1,76 +1,39 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import type { LucideProps } from 'lucide-react';
-import { Train, Layers, Building2, Heart, Factory, Zap, Home, MapPin, ArrowUpRight } from 'lucide-react';
-import type { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import { sectors } from '@/data/sectors';
 import Container from '@/components/ui/Container';
 
-type LucideIcon = ForwardRefExoticComponent<LucideProps & RefAttributes<SVGSVGElement>>;
-
-const iconMap: Record<string, LucideIcon> = {
-  Train, Layers, Building2, Heart, Factory, Zap, Home, MapPin,
-};
-
-const accentColors = ['#00d4ff','#1e6fff','#10b981','#f0a020','#00d4ff','#1e6fff','#10b981','#f0a020'];
-
 export default function SectorsSection() {
-  const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<number | null>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ['-3%', '3%']);
 
   return (
-    <section ref={ref} className="relative overflow-hidden" style={{ background: '#050505' }}>
-      <motion.div style={{ y: bgY }}
-        className="absolute inset-0 blueprint-grid-fine pointer-events-none" />
-      <div className="h-px bg-white/5" />
+    <section className="relative overflow-hidden bg-black">
+      <div className="h-px" style={{ background: 'rgba(255,255,255,0.08)' }} />
 
       <Container className="py-20 lg:py-28">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
-          <div>
-            <motion.span
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
+        <div className="mb-16">
+          <div className="overflow-hidden mb-2">
+            <motion.h2
+              initial={{ y: '110%' }}
+              whileInView={{ y: '0%' }}
               viewport={{ once: true }}
-              className="text-[9px] font-black uppercase tracking-[0.45em] text-cyan-400 block mb-3"
+              transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+              className="font-black text-white leading-[1.0] tracking-[-0.025em]"
+              style={{ fontSize: 'clamp(36px, 6vw, 80px)' }}
             >
-              Our Sectors
-            </motion.span>
-            <div className="overflow-hidden">
-              <motion.h2
-                initial={{ y: '110%' }}
-                whileInView={{ y: '0%' }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.0] tracking-[-0.025em]"
-              >
-                Eight Sectors.<br />
-                <span className="gradient-text-cyan">One Capability.</span>
-              </motion.h2>
-            </div>
+              What We Build
+            </motion.h2>
           </div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="text-[13px] text-[#888899] max-w-xs leading-relaxed flex-shrink-0"
-          >
-            From metro tunnels to power substations — SAM India executes across India&apos;s
-            most critical infrastructure sectors.
-          </motion.p>
         </div>
 
-        {/* Row list */}
-        <div className="divide-y divide-white/5">
+        {/* Numbered row list */}
+        <div>
           {sectors.map((sector, i) => {
-            const Icon = iconMap[sector.icon] || Building2;
-            const color = accentColors[i];
             const active = hovered === i;
             return (
               <motion.div
@@ -78,42 +41,40 @@ export default function SectorsSection() {
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
-                transition={{ duration: 0.5, delay: i * 0.055, ease: [0.21, 0.47, 0.32, 0.98] }}
+                transition={{ duration: 0.5, delay: i * 0.05, ease: [0.21, 0.47, 0.32, 0.98] }}
+                className="border-b"
+                style={{ borderColor: 'rgba(255,255,255,0.08)' }}
               >
                 <Link href={`/sectors#${sector.id}`}>
                   <div
-                    className="group relative flex items-center gap-5 sm:gap-8 py-5 sm:py-6 cursor-pointer"
+                    className="group relative flex items-center gap-6 py-6 cursor-pointer overflow-hidden"
                     onMouseEnter={() => setHovered(i)}
                     onMouseLeave={() => setHovered(null)}
                   >
-                    {/* Left accent */}
-                    <motion.div
-                      animate={{ scaleY: active ? 1 : 0, opacity: active ? 1 : 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full origin-top"
-                      style={{ background: color }}
-                    />
-
-                    <span className="text-[11px] font-mono text-white/20 w-5 flex-shrink-0 group-hover:text-[#888899] transition-colors">
+                    {/* Watermark number */}
+                    <span
+                      className="absolute left-0 font-black leading-none select-none pointer-events-none transition-colors duration-300"
+                      style={{
+                        fontSize: 'clamp(60px, 8vw, 100px)',
+                        color: active ? 'rgba(255,215,0,0.12)' : 'rgba(255,255,255,0.06)',
+                        lineHeight: 1,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        letterSpacing: '-0.04em',
+                      }}
+                    >
                       {String(i + 1).padStart(2, '0')}
                     </span>
 
-                    <motion.div
-                      animate={{ scale: active ? 1.1 : 1 }}
-                      className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300"
-                      style={{
-                        background: active ? `${color}18` : 'rgba(255,255,255,0.04)',
-                        border: `1px solid ${active ? color + '40' : 'rgba(255,255,255,0.06)'}`,
-                      }}
-                    >
-                      <Icon className="w-4 h-4 transition-colors duration-300"
-                        style={{ color: active ? color : '#888899' }} />
-                    </motion.div>
-
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base sm:text-lg font-black text-white/80 group-hover:text-white transition-colors duration-200">
+                    {/* Sector title — offset to clear number */}
+                    <div className="flex-1 min-w-0 pl-[4.5rem] sm:pl-[6rem] lg:pl-[8rem]">
+                      <motion.h3
+                        animate={{ x: active ? 4 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="text-xl font-black text-white/80 group-hover:text-white transition-colors duration-200"
+                      >
                         {sector.shortTitle}
-                      </h3>
+                      </motion.h3>
                       <AnimatePresence>
                         {active && (
                           <motion.p
@@ -121,7 +82,7 @@ export default function SectorsSection() {
                             animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                             exit={{ opacity: 0, height: 0, marginTop: 0 }}
                             transition={{ duration: 0.22 }}
-                            className="text-[12px] text-[#888899] leading-relaxed overflow-hidden"
+                            className="text-[12px] text-white/40 leading-relaxed overflow-hidden"
                           >
                             {sector.description}
                           </motion.p>
@@ -129,7 +90,10 @@ export default function SectorsSection() {
                       </AnimatePresence>
                     </div>
 
-                    <span className="hidden sm:block text-[10px] font-bold uppercase tracking-wider text-[#888899] flex-shrink-0">
+                    <span
+                      className="hidden sm:block text-white/30 uppercase flex-shrink-0 font-mono"
+                      style={{ fontSize: '10px', letterSpacing: '0.1em' }}
+                    >
                       {sector.capabilities.length} Capabilities
                     </span>
 
@@ -138,7 +102,10 @@ export default function SectorsSection() {
                       transition={{ duration: 0.2 }}
                       className="flex-shrink-0"
                     >
-                      <ArrowUpRight className="w-4 h-4 text-white" />
+                      <ArrowUpRight
+                        className="w-4 h-4 transition-colors duration-200"
+                        style={{ color: active ? '#FFD700' : 'white' }}
+                      />
                     </motion.div>
                   </div>
                 </Link>
@@ -147,7 +114,7 @@ export default function SectorsSection() {
           })}
         </div>
       </Container>
-      <div className="h-px bg-white/5" />
+      <div className="h-px" style={{ background: 'rgba(255,255,255,0.08)' }} />
     </section>
   );
 }

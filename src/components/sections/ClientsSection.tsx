@@ -1,48 +1,60 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { clients } from '@/data/clients';
 import Container from '@/components/ui/Container';
 
-// Infinite horizontal marquee for client logos
-function Marquee({ items, speed = 40, reverse = false }: {
+function MarqueeRow({ items, speed = 40, reverse = false }: {
   items: typeof clients;
   speed?: number;
   reverse?: boolean;
 }) {
   const doubled = [...items, ...items];
-  const dir = reverse ? 'marquee-reverse' : 'marquee';
+  const cls = reverse ? 'marquee-reverse' : 'marquee';
   return (
     <div className="relative overflow-hidden">
-      <div className={`flex gap-4 ${dir}`} style={{ animationDuration: `${speed}s` }}>
+      <div className={`flex gap-3 ${cls}`} style={{ animationDuration: `${speed}s` }}>
         {doubled.map((client, i) => (
           <div
             key={i}
-            className="flex-shrink-0 glass rounded-xl px-5 py-3 border border-white/5 hover:border-cyan-400/20 transition-colors duration-300 flex items-center gap-3 group cursor-default"
+            className="flex-shrink-0 rounded-xl px-5 py-3 border flex items-center gap-3 group cursor-default transition-colors duration-300"
+            style={{
+              background: '#0A0A0A',
+              borderColor: 'rgba(255,255,255,0.06)',
+            }}
           >
-            <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:border-cyan-400/20 transition-colors">
-              <span className="text-[9px] font-black text-[#8899bb] group-hover:text-cyan-400 transition-colors tracking-wider">
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 border"
+              style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}
+            >
+              <span
+                className="font-black text-white/40"
+                style={{ fontSize: '9px', letterSpacing: '0.05em' }}
+              >
                 {client.logoPlaceholder}
               </span>
             </div>
             <div>
               <div className="text-[11px] font-semibold text-white/80 whitespace-nowrap">{client.name}</div>
-              <div className="text-[9px] text-[#8899bb] uppercase tracking-wider">{client.sector}</div>
+              <div
+                className="uppercase text-white/30"
+                style={{ fontSize: '9px', letterSpacing: '0.1em', fontFamily: 'var(--font-geist-mono, monospace)' }}
+              >
+                {client.sector}
+              </div>
             </div>
           </div>
         ))}
       </div>
-      {/* Edge fades */}
       <div className="absolute left-0 top-0 bottom-0 w-20 pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, #050505, transparent)' }} />
+        style={{ background: 'linear-gradient(90deg, #000, transparent)' }} />
       <div className="absolute right-0 top-0 bottom-0 w-20 pointer-events-none"
-        style={{ background: 'linear-gradient(-90deg, #050505, transparent)' }} />
+        style={{ background: 'linear-gradient(-90deg, #000, transparent)' }} />
     </div>
   );
 }
 
-const sectors = [
+const sectorTags = [
   'Metro Rail',
   'Central Govt / CPWD',
   'Airports (AAI)',
@@ -55,68 +67,63 @@ const sectors = [
 ];
 
 export default function ClientsSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ['-3%', '3%']);
-
   return (
-    <section ref={ref} className="relative py-24 bg-[#050505] overflow-hidden">
-      <motion.div style={{ y: bgY }} className="absolute inset-0 blueprint-grid opacity-15" />
-      <div className="absolute inset-0"
-        style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,212,255,0.03), transparent 70%)' }} />
-
+    <section className="relative py-24 bg-black overflow-hidden">
       <Container className="relative z-10">
-        {/* Section label */}
+        {/* Header — left-aligned editorial */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="mb-16"
         >
-          <span className="text-[9px] font-black uppercase tracking-[0.45em] text-cyan-400">
+          <span
+            className="uppercase text-white/30 block mb-4 font-mono"
+            style={{ fontSize: '9px', letterSpacing: '0.45em' }}
+          >
             Our Clients
           </span>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.0] tracking-[-0.02em] mt-4 mb-5"
-          >
-            Trusted by India&apos;s<br />
-            <span className="gradient-text-cyan">Leading Institutions</span>
-          </motion.h2>
-
+          <div className="overflow-hidden">
+            <motion.h2
+              initial={{ y: '110%' }}
+              whileInView={{ y: '0%' }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+              className="font-black text-white leading-[1.0] tracking-[-0.025em]"
+              style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
+            >
+              Trusted by India&apos;s<br />
+              <span style={{ color: '#FFD700' }}>Leading Institutions</span>
+            </motion.h2>
+          </div>
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-[#8899bb] max-w-lg mx-auto text-base leading-relaxed"
+            className="text-white/40 max-w-lg text-sm leading-relaxed mt-4"
           >
-            From metro rail corporations and central government agencies to defence establishments and industrial leaders — SAM India is the contractor of choice for mission-critical infrastructure.
+            From metro rail corporations and central government agencies to defence establishments and industrial leaders.
           </motion.p>
         </motion.div>
 
         {/* Marquee rows */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <Marquee items={clients} speed={35} />
+            <MarqueeRow items={clients} speed={35} />
           </motion.div>
-
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <Marquee items={[...clients].reverse()} speed={28} reverse />
+            <MarqueeRow items={[...clients].reverse()} speed={28} reverse />
           </motion.div>
         </div>
 
@@ -126,11 +133,19 @@ export default function ClientsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap gap-2 justify-center mt-12"
+          className="flex flex-wrap gap-2 mt-12"
         >
-          {sectors.map((s) => (
-            <span key={s}
-              className="text-[9px] font-black uppercase tracking-[0.25em] px-3 py-1.5 rounded-full border border-white/8 text-[#8899bb] hover:border-cyan-400/25 hover:text-cyan-400 transition-all duration-200 cursor-default">
+          {sectorTags.map((s) => (
+            <span
+              key={s}
+              className="uppercase px-3 py-1.5 border text-white/40 hover:text-white/70 hover:border-[#FFD700]/30 transition-all duration-200 cursor-default"
+              style={{
+                fontSize: '9px',
+                letterSpacing: '0.25em',
+                fontFamily: 'var(--font-geist-mono, monospace)',
+                borderColor: 'rgba(255,255,255,0.10)',
+              }}
+            >
               {s}
             </span>
           ))}
@@ -141,7 +156,8 @@ export default function ClientsSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="text-center text-[10px] text-[#8899bb]/50 mt-8 italic"
+          className="text-[10px] text-white/20 mt-8 italic"
+          style={{ fontFamily: 'var(--font-geist-mono, monospace)' }}
         >
           Client logos to be added after verification and approval.
         </motion.p>

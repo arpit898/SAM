@@ -1,14 +1,8 @@
 import type { Metadata } from 'next';
 import HeroSection from '@/components/sections/HeroSection';
-import MorphSection from '@/components/sections/MorphSection';
 import StatsSection from '@/components/sections/StatsSection';
 import SectorsSection from '@/components/sections/SectorsSection';
 import ProjectsPreviewSection from '@/components/sections/ProjectsPreviewSection';
-import ShaderSection from '@/components/sections/ShaderSection';
-import CommandCenterSection from '@/components/sections/CommandCenterSection';
-import TBMSection from '@/components/sections/TBMSection';
-import TechnologySection from '@/components/sections/TechnologySection';
-import TimelineSection from '@/components/sections/TimelineSection';
 import ClientsSection from '@/components/sections/ClientsSection';
 import CTASection from '@/components/ui/CTASection';
 
@@ -22,15 +16,9 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <MorphSection />
       <StatsSection />
       <SectorsSection />
       <ProjectsPreviewSection />
-      <ShaderSection />
-      <TBMSection />
-      <CommandCenterSection />
-      <TechnologySection />
-      <TimelineSection />
       <ClientsSection />
       <CTASection
         tag="Join Our Team"

@@ -2,13 +2,10 @@
 
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Cpu, BarChart3, Globe, Database, GitBranch, Sparkles, ArrowRight } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import SectionHeader from '@/components/ui/SectionHeader';
-
-const WireframeCity = dynamic(() => import('@/components/3d/WireframeCity'), { ssr: false });
 
 const techItems = [
   { icon: BarChart3, title: 'Digital Project Controls', desc: 'Primavera / MS Project schedule management with baseline tracking and variance analysis.' },
@@ -87,54 +84,37 @@ export default function TechnologySection() {
             </motion.div>
           </motion.div>
 
-          {/* Right: 3D wireframe city */}
+          {/* Right: data panel */}
           <motion.div
             style={{ opacity: cityOpacity, y: cityY }}
-            className="relative h-[480px] lg:h-[560px] rounded-2xl overflow-hidden"
+            className="relative h-[480px] lg:h-[560px] rounded-2xl overflow-hidden border"
           >
-            {/* HUD overlay */}
-            <div className="absolute inset-0 z-10 pointer-events-none">
+            <div
+              className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center gap-8 p-10"
+              style={{ background: '#0A0A0A', borderColor: 'rgba(255,255,255,0.08)' }}
+            >
               {[
-                'top-3 left-3 border-t border-l',
-                'top-3 right-3 border-t border-r',
-                'bottom-3 left-3 border-b border-l',
-                'bottom-3 right-3 border-b border-r',
-              ].map((cls, i) => (
-                <div key={i} className={`absolute w-5 h-5 border-cyan-400/30 ${cls}`} />
+                { label: 'CONTRACT VALUE', value: '₹1,436 Cr', color: '#FFD700' },
+                { label: 'PROJECTS ACTIVE', value: '12', color: '#ffffff' },
+                { label: 'SITES MONITORED', value: '8', color: '#ffffff' },
+                { label: 'WORKFORCE', value: '1,400+', color: '#ffffff' },
+              ].map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <div
+                    className="font-black leading-none"
+                    style={{ fontSize: 'clamp(32px, 5vw, 56px)', color: stat.color, letterSpacing: '-0.03em' }}
+                  >
+                    {stat.value}
+                  </div>
+                  <div
+                    className="uppercase text-white/30 mt-1 font-mono"
+                    style={{ fontSize: '9px', letterSpacing: '0.4em' }}
+                  >
+                    {stat.label}
+                  </div>
+                </div>
               ))}
-
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                <motion.div
-                  className="w-1.5 h-1.5 rounded-full bg-cyan-400"
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ repeat: Infinity, duration: 2 }}
-                />
-                <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-cyan-400/60">
-                  INFRA · DIGITAL TWIN · LIVE
-                </span>
-              </div>
-
-              {/* Data readouts */}
-              <div className="absolute bottom-4 left-4">
-                <div className="text-[8px] font-mono text-[#8899bb] space-y-1">
-                  <div>PROJECTS ACTIVE: 12</div>
-                  <div>SITES MONITORED: 8</div>
-                </div>
-              </div>
-              <div className="absolute bottom-4 right-4">
-                <div className="text-[8px] font-mono text-[#8899bb] text-right space-y-1">
-                  <div>CONTRACT VALUE: ₹1,436 Cr</div>
-                  <div>WORKFORCE: 1,400+</div>
-                </div>
-              </div>
             </div>
-
-            {/* Subtle frame */}
-            <div className="absolute inset-0 rounded-2xl border border-cyan-400/10 z-10 pointer-events-none" />
-            <div className="absolute inset-0 rounded-2xl"
-              style={{ background: 'linear-gradient(180deg, rgba(5,10,26,0.3) 0%, transparent 30%, transparent 70%, rgba(5,10,26,0.5) 100%)' }} />
-
-            <WireframeCity />
           </motion.div>
         </div>
       </Container>

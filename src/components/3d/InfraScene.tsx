@@ -42,7 +42,7 @@ function TunnelRings() {
         <mesh key={i} position={[0, 0, d.z]} rotation={[Math.PI / 2, 0, d.rotOff]}>
           <torusGeometry args={[d.r, 0.012, 8, 80]} />
           <meshBasicMaterial
-            color={d.highlight ? '#00d4ff' : '#1e4fff'}
+            color={d.highlight ? '#FFD700' : '#FF4D00'}
             transparent
             opacity={d.highlight ? 0.45 : 0.18}
             blending={THREE.AdditiveBlending}
@@ -113,7 +113,7 @@ function StreamParticles({ mouse }: { mouse: React.MutableRefObject<[number, num
       </bufferGeometry>
       <pointsMaterial
         size={0.016}
-        color="#00d4ff"
+        color="#FFD700"
         transparent
         opacity={0.55}
         sizeAttenuation
@@ -137,7 +137,7 @@ function SteelFrame() {
   return (
     <>
       {beams.map((pts, i) => (
-        <Line key={i} points={pts} color="#1e4fff" transparent opacity={0.15} lineWidth={0.5} />
+        <Line key={i} points={pts} color="#333333" transparent opacity={0.25} lineWidth={0.5} />
       ))}
     </>
   );
@@ -171,7 +171,7 @@ function SurveyGrid() {
 
   return (
     <mesh ref={ref} geometry={geo} position={[0, -2.5, -6]} rotation={[-0.35, 0, 0]}>
-      <meshBasicMaterial color="#1e4fff" transparent opacity={0.07} wireframe blending={THREE.AdditiveBlending} depthWrite={false} />
+      <meshBasicMaterial color="#333333" transparent opacity={0.07} wireframe blending={THREE.AdditiveBlending} depthWrite={false} />
     </mesh>
   );
 }
@@ -182,7 +182,7 @@ function FloatingNodes() {
   const nodes = useMemo(() =>
     Array.from({ length: 10 }, (_, i) => ({
       p: [(Math.random() - 0.5) * 5, (Math.random() - 0.5) * 3.5, -Math.random() * 12 - 2] as [number, number, number],
-      c: (['#f0a020', '#00d4ff', '#1e6fff'] as const)[i % 3],
+      c: (['#FFD700', '#FF4D00', '#ffffff'] as const)[i % 3],
       sp: 0.3 + Math.random() * 0.4,
       ph: Math.random() * Math.PI * 2,
     })), []);
@@ -214,7 +214,7 @@ function TunnelGlow() {
   return (
     <mesh position={[0, 0, -40]}>
       <sphereGeometry args={[5, 16, 16]} />
-      <meshBasicMaterial color="#00d4ff" transparent opacity={0.025} blending={THREE.AdditiveBlending} depthWrite={false} />
+      <meshBasicMaterial color="#FFD700" transparent opacity={0.015} blending={THREE.AdditiveBlending} depthWrite={false} />
     </mesh>
   );
 }
@@ -271,9 +271,9 @@ function Scene() {
     <>
       <fog attach="fog" args={['#000', 8, 55]} />
       <ambientLight color="#050505" intensity={0.4} />
-      <pointLight color="#00d4ff" intensity={2.5} position={[0, 0, 3]} distance={18} />
-      <pointLight color="#1e3fff" intensity={1.2} position={[2, 2, -8]} distance={35} />
-      <pointLight color="#f0a020" intensity={0.4} position={[-4, -2, -4]} distance={20} />
+      <pointLight color="#FFD700" intensity={2.5} position={[0, 0, 3]} distance={18} />
+      <pointLight color="#FF4D00" intensity={1.2} position={[2, 2, -8]} distance={35} />
+      <pointLight color="#FFD700" intensity={0.4} position={[-4, -2, -4]} distance={20} />
       <TunnelRings />
       <StreamParticles mouse={mouse} />
       <SteelFrame />
